@@ -1,174 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CLASSIFIED MISSION</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Courier New', monospace;
-      background: #0b0f14;
-      color: #e6f5e6;
-    }
-    .screen {
-      display: none;
-      min-height: 100vh;
-      padding: 40px 20px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      text-align: center;
-    }
-    .screen.active { display: flex; }
-    h1, h2, h3 { color: #7CFF9E; }
-    button {
-      margin-top: 25px;
-      padding: 14px 22px;
-      background: transparent;
-      color: #7CFF9E;
-      border: 2px solid #7CFF9E;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    button:hover { background: #7CFF9E; color: #000; }
-    .card {
-      border: 1px solid #3f5f4b;
-      padding: 16px;
-      margin: 15px 0;
-      cursor: pointer;
-      width: 90%;
-      max-width: 500px;
-    }
-    .details { display: none; margin-top: 10px; color: #cfeacf; }
-    .footer { margin-top: 40px; opacity: 0.7; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLASSIFIED MISSION</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  background: #0b0f14;
+  color: #e6f5e6;
+}
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.screen.active { display: flex; }
+h1,h2,h3 { color:#7CFF9E; }
+button {
+  margin-top: 25px;
+  padding: 14px 22px;
+  background: transparent;
+  color: #7CFF9E;
+  border: 2px solid #7CFF9E;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button:hover { background: #7CFF9E; color:#000; }
+.card {
+  border: 1px solid #3f5f4b;
+  padding: 16px;
+  margin: 15px 0;
+  cursor: pointer;
+  width: 90%;
+  max-width: 500px;
+}
+.details { display: none; margin-top: 10px; color:#cfeacf; }
+.footer { margin-top: 40px; opacity:0.7; }
+</style>
 </head>
 <body>
 
 <!-- SCREEN 1 -->
 <div id="screen1" class="screen active">
-  <h1>CLASSIFIED MISSION</h1>
-  <p>Unauthorized access is prohibited.</p>
-  <button id="startBtn">BEGIN MISSION BRIEFING</button>
+<h1>CLASSIFIED MISSION</h1>
+<p>Unauthorized access is prohibited.</p>
+<button onclick="showScreen(2)">BEGIN MISSION BRIEFING</button>
 </div>
 
 <!-- SCREEN 2 -->
 <div id="screen2" class="screen">
-  <h2>AGENT VERIFICATION</h2>
-  <p>Tap to verify identity.</p>
-  <button id="verifyBtn">VERIFY AGENT</button>
-  <p class="footer">ACCESS GRANTED, AGENT</p>
+<h2>AGENT VERIFICATION</h2>
+<p>Tap to verify identity.</p>
+<button onclick="showScreen(3)">VERIFY AGENT</button>
+<p class="footer">ACCESS GRANTED, AGENT</p>
 </div>
 
 <!-- SCREEN 3 -->
 <div id="screen3" class="screen">
-  <h2>MISSION BRIEFING</h2>
-  <p>Your mission, should you choose to accept it, is to select our next vacation destination.</p>
-  <ul>
-    <li>⏱ 3–4 nights (4–5 days)</li>
-    <li>💰 Budget-conscious</li>
-    <li>✈️ Departing from Birmingham, Alabama</li>
-    <li>📅 Travel window: Summer, December, or Spring Break</li>
-    <li>🍽 Focus on food, relaxing, light adventure</li>
-  </ul>
-  <button id="toDossiersBtn">VIEW DESTINATION DOSSIERS</button>
+<h2>MISSION BRIEFING</h2>
+<p>Your mission, should you choose to accept it, is to select our next vacation destination.</p>
+<ul>
+<li>⏱ 3–4 nights (4–5 days)</li>
+<li>💰 Budget-conscious</li>
+<li>✈️ Departing from Birmingham, Alabama</li>
+<li>📅 Travel window: Summer, December, or Spring Break</li>
+<li>🍽 Focus on food, relaxing, light adventure</li>
+</ul>
+<button onclick="showScreen(4)">VIEW DESTINATION DOSSIERS</button>
 </div>
 
 <!-- SCREEN 4 -->
 <div id="screen4" class="screen">
-  <h2>DESTINATION DOSSIERS</h2>
+<h2>DESTINATION DOSSIERS</h2>
 
-  <div class="card" onclick="toggle(this)">
-    <strong>DOSSIER 1 – GULF SHORES / ORANGE BEACH, AL</strong>
-    <div class="details">
-      Beach time, seafood, relaxation.<br>
-      Activities: beach walks, Gulf State Park, seafood dining.<br>
-      Cheapest: December, early spring.
-    </div>
-  </div>
-
-  <div class="card" onclick="toggle(this)">
-    <strong>DOSSIER 2 – CHATTANOOGA, TN</strong>
-    <div class="details">
-      Walkable downtown with mountain views.<br>
-      Activities: Tennessee Aquarium, Lookout Mountain, food scene.<br>
-      Cheapest: Winter, early spring.
-    </div>
-  </div>
-
-  <div class="card" onclick="toggle(this)">
-    <strong>DOSSIER 3 – BLUE RIDGE, GA</strong>
-    <div class="details">
-      Cozy mountain cabin vibes.<br>
-      Activities: hiking, waterfalls, scenic drives.<br>
-      Cheapest: Late winter, early spring.
-    </div>
-  </div>
-
-  <div class="card" onclick="toggle(this)">
-    <strong>DOSSIER 4 – MENTONE / LOOKOUT MOUNTAIN, AL</strong>
-    <div class="details">
-      Quiet, romantic mountain escape.<br>
-      Activities: DeSoto Falls, Little River Canyon, cafés.<br>
-      Cheapest: Winter, early spring.
-    </div>
-  </div>
-
-  <div class="card" onclick="toggle(this)">
-    <strong>DOSSIER 5 – FAIRHOPE, AL</strong>
-    <div class="details">
-      Charming coastal town on Mobile Bay.<br>
-      Activities: pier walks, sunsets, food, shopping.<br>
-      Cheapest: Winter, early spring.
-    </div>
-  </div>
-
-  <button id="toFinalBtn">FINAL DECISION</button>
+<div class="card" onclick="toggle(this)">
+<strong>DOSSIER 1 – GULF SHORES / ORANGE BEACH, AL</strong>
+<div class="details">
+Beach time, seafood, relaxation.<br>
+Activities: beach walks, Gulf State Park, seafood dining.<br>
+Cheapest: December, early spring.
+</div>
 </div>
 
-<!-- SCREEN 5 -->
-<div id="screen5" class="screen">
-  <h2>FINAL DECISION</h2>
-  <p>The final decision is yours, Agent.</p>
-  <button id="acceptBtn">ACCEPT MISSION</button>
-  <p id="finalMsg" class="footer"></p>
+<div class="card" onclick="toggle(this)">
+<strong>DOSSIER 2 – CHATTANOOGA, TN</strong>
+<div class="details">
+Walkable downtown with mountain views.<br>
+Activities: Tennessee Aquarium, Lookout Mountain, food scene.<br>
+Cheapest: Winter, early spring.
+</div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  function showScreen(n) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen' + n).classList.add('active');
-    window.scrollTo(0,0);
-  }
+<div class="card" onclick="toggle(this)">
+<strong>DOSSIER 3 – BLUE RIDGE, GA</strong>
+<div class="details">
+Cozy mountain cabin vibes.<br>
+Activities: hiking, waterfalls, scenic drives.<br>
+Cheapest: Late winter, early spring.
+</div>
+</div>
 
-  document.getElementById('startBtn').addEventListener('click', function () {
-    showScreen(2);
-  });
-  document.getElementById('verifyBtn').addEventListener('click', function () {
-    showScreen(3);
-  });
-  document.getElementById('toDossiersBtn').addEventListener('click', function () {
-    showScreen(4);
-  });
-  document.getElementById('toFinalBtn').addEventListener('click', function () {
-    showScreen(5);
-  });
-  document.getElementById('acceptBtn').addEventListener('click', function () {
-    document.getElementById('finalMsg').innerText =
-      'Mission accepted. Your handler will take care of everything.';
-  });
+<div class="card" onclick="toggle(this)">
+<strong>DOSSIER 4 – MENTONE / LOOKOUT MOUNTAIN, AL</strong>
+<div class="details">
+Quiet, romantic mountain escape.<br>
+Activities: DeSoto Falls, Little River Canyon, cafés.<br>
+Cheapest: Winter, early spring.
+</div>
+</div>
 
-  window.toggle = function(card) {
-    const d = card.querySelector('.details');
-    d.style.display = d.style.display === 'block' ? 'none' : 'block';
-  };
-});
-</script>
-
-</body>
-</html>
+<div class="card" onclick="toggle(this)">
+<strong>DOSSIER 5 – FAIRHOPE, AL</strong>
+<div class="details">
+Charming coastal town on Mobile Bay.<br
