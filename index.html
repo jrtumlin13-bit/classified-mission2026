@@ -1,123 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CLASSIFIED MISSION</title>
-<style>
-body {
-  margin: 0;
-  font-family: 'Courier New', monospace;
-  background: #0b0f14;
-  color: #e6f5e6;
-}
-.screen {
-  display: none;
-  min-height: 100vh;
-  padding: 40px 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-.screen.active { display: flex; }
-h1,h2,h3 { color:#7CFF9E; }
-button {
-  margin-top: 25px;
-  padding: 14px 22px;
-  background: transparent;
-  color: #7CFF9E;
-  border: 2px solid #7CFF9E;
-  font-size: 1rem;
-  cursor: pointer;
-}
-button:hover { background: #7CFF9E; color:#000; }
-.card {
-  border: 1px solid #3f5f4b;
-  padding: 16px;
-  margin: 15px 0;
-  cursor: pointer;
-  width: 90%;
-  max-width: 500px;
-}
-.details { display: none; margin-top: 10px; color:#cfeacf; }
-.footer { margin-top: 40px; opacity:0.7; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASSIFIED MISSION</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #00ff41;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .classified-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border: 3px solid #00ff41;
+            padding: 20px;
+            background: rgba(0, 255, 65, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #ffbf00;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #888;
+            letter-spacing: 3px;
+        }
+
+        .btn {
+            background: #00ff41;
+            color: #0a0a0a;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            letter-spacing: 2px;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+
+        .btn:hover {
+            background: #ffbf00;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 191, 0, 0.7);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .content-box {
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff41;
+            padding: 30px;
+            margin: 20px;
+            line-height: 1.8;
+        }
+
+        .mission-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .constraints {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .constraints li {
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(0, 255, 65, 0.1);
+            border-left: 4px solid #ffbf00;
+        }
+
+        .dossier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .dossier-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dossier-card:hover {
+            border-color: #ffbf00;
+            box-shadow: 0 0 20px rgba(255, 191, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .dossier-card h3 {
+            color: #ffbf00;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .dossier-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #00ff41;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .dossier-details.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .dossier-summary {
+            color: #aaa;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .detail-label {
+            color: #ffbf00;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .final-message {
+            display: none;
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 3px solid #ffbf00;
+            margin-top: 30px;
+            animation: fadeIn 1s ease;
+        }
+
+        .final-message.show {
+            display: block;
+        }
+
+        .final-message h2 {
+            color: #00ff41;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+                letter-spacing: 4px;
+            }
+
+            h2 {
+                font-size: 1.4em;
+                letter-spacing: 2px;
+            }
+
+            .content-box {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .dossier-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Screen 1: Landing -->
+    <div id="screen1" class="screen active">
+        <div class="classified-header">
+            <h1>CLASSIFIED MISSION</h1>
+            <p class="subtitle">/// TOP SECRET ///</p>
+        </div>
+        <button class="btn" onclick="goToScreen(2)">BEGIN MISSION BRIEFING</button>
+    </div>
 
-<!-- SCREEN 1 -->
-<div id="screen1" class="screen active">
-<h1>CLASSIFIED MISSION</h1>
-<p>Unauthorized access is prohibited.</p>
-<button onclick="showScreen(2)">BEGIN MISSION BRIEFING</button>
-</div>
+    <!-- Screen 2: Agent Verification -->
+    <div id="screen2" class="screen">
+        <div class="classified-header">
+            <h2>AGENT VERIFICATION</h2>
+            <p class="subtitle">/// IDENTITY CONFIRMED ///</p>
+        </div>
+        <div class="content-box">
+            <p class="mission-text" style="text-align: center; font-size: 1.3em;">
+                ACCESS GRANTED, AGENT
+            </p>
+            <p style="text-align: center; color: #888;">
+                Your credentials have been verified. You are cleared for the mission briefing.
+            </p>
+        </div>
+        <button class="btn" onclick="goToScreen(3)">VERIFY AGENT</button>
+    </div>
 
-<!-- SCREEN 2 -->
-<div id="screen2" class="screen">
-<h2>AGENT VERIFICATION</h2>
-<p>Tap to verify identity.</p>
-<button onclick="showScreen(3)">VERIFY AGENT</button>
-<p class="footer">ACCESS GRANTED, AGENT</p>
-</div>
+    <!-- Screen 3: Mission Briefing -->
+    <div id="screen3" class="screen">
+        <div class="classified-header">
+            <h2>MISSION BRIEFING</h2>
+            <p class="subtitle">/// OPERATION: VACATION ///</p>
+        </div>
+        <div class="content-box">
+            <p class="mission-text">
+                <strong>MISSION OBJECTIVE:</strong> Your mission, should you choose to accept it, is to select our next vacation destination. This is a critical operation requiring careful consideration and expert decision-making.
+            </p>
+            <p class="mission-text">
+                <strong>MISSION PARAMETERS:</strong>
+            </p>
+            <ul class="constraints">
+                <li><strong>Duration:</strong> 3-4 nights</li>
+                <li><strong>Budget Status:</strong> Budget-conscious operation</li>
+                <li><strong>Departure Point:</strong> Birmingham, Alabama</li>
+                <li><strong>Travel Window:</strong> Summer, December, or Spring Break</li>
+                <li><strong>Mission Focus:</strong> Food, relaxation, and light adventure activities</li>
+            </ul>
+            <p class="mission-text" style="color: #ffbf00;">
+                Five destination dossiers have been prepared for your review. Study them carefully before making your final decision.
+            </p>
+        </div>
+        <button class="btn" onclick="goToScreen(4)">VIEW DESTINATION DOSSIERS</button>
+    </div>
 
-<!-- SCREEN 3 -->
-<div id="screen3" class="screen">
-<h2>MISSION BRIEFING</h2>
-<p>Your mission, should you choose to accept it, is to select our next vacation destination.</p>
-<ul>
-<li>⏱ 3–4 nights (4–5 days)</li>
-<li>💰 Budget-conscious</li>
-<li>✈️ Departing from Birmingham, Alabama</li>
-<li>📅 Travel window: Summer, December, or Spring Break</li>
-<li>🍽 Focus on food, relaxing, light adventure</li>
-</ul>
-<button onclick="showScreen(4)">VIEW DESTINATION DOSSIERS</button>
-</div>
+    <!-- Screen 4: Destination Dossiers -->
+    <div id="screen4" class="screen">
+        <div class="classified-header">
+            <h2>DESTINATION DOSSIERS</h2>
+            <p class="subtitle">/// CLICK TO EXPAND ///</p>
+        </div>
+        <div class="dossier-grid">
+            <div class="dossier-card" onclick="toggleDossier(1)">
+                <h3>DOSSIER #1: GULF SHORES</h3>
+                <p class="dossier-summary">Orange Beach, Alabama</p>
+                <div id="dossier1" class="dossier-details">
+                    <p><span class="detail-label">LOCATION:</span> Gulf Coast of Alabama</p>
+                    <p><span class="detail-label">DESCRIPTION:</span> White sand beaches, fresh seafood, and laid-back coastal vibes. Perfect for beach relaxation with excellent dining options including The Gulf and Fishers restaurants.</p>
+                    <p><span class="detail-label">ACTIVITIES:</span> Beach lounging, dolphin cruises, Gulf State Park trails, beach volleyball, sunset watching, seafood feasting</p>
+                    <p><span class="detail-label">BEST VALUE SEASON:</span> Late April-May or September-October (shoulder season, warm weather, lower prices)</p>
+                </div>
+            </div>
 
-<!-- SCREEN 4 -->
-<div id="screen4" class="screen">
-<h2>DESTINATION DOSSIERS</h2>
+            <div class="dossier-card" onclick="toggleDossier(2)">
+                <h3>DOSSIER #2: CHATTANOOGA</h3>
+                <p class="dossier-summary">Tennessee</p>
+                <div id="dossier2" class="dossier-details">
+                    <p><span class="detail-label">LOCATION:</span> Southeastern Tennessee</p>
+                    <p><span class="detail-label">DESCRIPTION:</span> Mountain town with riverfront charm, thriving food scene, and excellent breweries. Mix of outdoor adventure and urban exploration.</p>
+                    <p><span class="detail-label">ACTIVITIES:</span> Tennessee Aquarium, Rock City, Ruby Falls, Lookout Mountain, riverside walks, downtown dining, craft beer tours</p>
+                    <p><span class="detail-label">BEST VALUE SEASON:</span> November-early December or March (mild weather, fewer crowds, off-peak pricing)</p>
+                </div>
+            </div>
 
-<div class="card" onclick="toggle(this)">
-<strong>DOSSIER 1 – GULF SHORES / ORANGE BEACH, AL</strong>
-<div class="details">
-Beach time, seafood, relaxation.<br>
-Activities: beach walks, Gulf State Park, seafood dining.<br>
-Cheapest: December, early spring.
-</div>
-</div>
+            <div class="dossier-card" onclick="toggleDossier(3)">
+                <h3>DOSSIER #3: BLUE RIDGE</h3>
+                <p class="dossier-summary">Georgia</p>
+                <div id="dossier3" class="dossier-details">
+                    <p><span class="detail-label">LOCATION:</span> North Georgia Mountains</p>
+                    <p><span class="detail-label">DESCRIPTION:</span> Charming mountain town with antique shops, local wineries, and scenic mountain views. Perfect for relaxation with a touch of adventure.</p>
+                    <p><span class="detail-label">ACTIVITIES:</span> Blue Ridge Scenic Railway, hiking trails, downtown shopping, wine tasting, waterfall hikes, cabin stays with mountain views</p>
+                    <p><span class="detail-label">BEST VALUE SEASON:</span> Late November-early December or mid-March to April (post-fall colors, pre-summer, better rates)</p>
+                </div>
+            </div>
 
-<div class="card" onclick="toggle(this)">
-<strong>DOSSIER 2 – CHATTANOOGA, TN</strong>
-<div class="details">
-Walkable downtown with mountain views.<br>
-Activities: Tennessee Aquarium, Lookout Mountain, food scene.<br>
-Cheapest: Winter, early spring.
-</div>
-</div>
+            <div class="dossier-card" onclick="toggleDossier(4)">
+                <h3>DOSSIER #4: MENTONE</h3>
+                <p class="dossier-summary">Lookout Mountain, Alabama</p>
+                <div id="dossier4" class="dossier-details">
+                    <p><span class="detail-label">LOCATION:</span> Lookout Mountain plateau, Alabama</p>
+                    <p><span class="detail-label">DESCRIPTION:</span> Quiet mountain retreat with stunning views, waterfalls, and local charm. Alabama's hidden gem for peaceful getaways.</p>
+                    <p><span class="detail-label">ACTIVITIES:</span> DeSoto Falls, Little River Canyon, downtown Mentone shops, hiking, scenic drives, cozy cabin dining</p>
+                    <p><span class="detail-label">BEST VALUE SEASON:</span> March-April or November (beautiful weather, minimal crowds, best cabin deals)</p>
+                </div>
+            </div>
 
-<div class="card" onclick="toggle(this)">
-<strong>DOSSIER 3 – BLUE RIDGE, GA</strong>
-<div class="details">
-Cozy mountain cabin vibes.<br>
-Activities: hiking, waterfalls, scenic drives.<br>
-Cheapest: Late winter, early spring.
-</div>
-</div>
+            <div class="dossier-card" onclick="toggleDossier(5)">
+                <h3>DOSSIER #5: FAIRHOPE</h3>
+                <p class="dossier-summary">Alabama</p>
+                <div id="dossier5" class="dossier-details">
+                    <p><span class="detail-label">LOCATION:</span> Eastern Shore of Mobile Bay</p>
+                    <p><span class="detail-label">DESCRIPTION:</span> Artistic coastal town with tree-lined streets, bay views, and exceptional restaurants. Perfect blend of art, food, and relaxation.</p>
+                    <p><span class="detail-label">ACTIVITIES:</span> Downtown art galleries, Fairhope Pier, boutique shopping, bay sunsets, farm-to-table dining, nearby beaches</p>
+                    <p><span class="detail-label">BEST VALUE SEASON:</span> September-October or March-April (pleasant weather, fewer tourists, better rates)</p>
+                </div>
+            </div>
+        </div>
+        <button class="btn" onclick="goToScreen(5)">PROCEED TO FINAL DECISION</button>
+    </div>
 
-<div class="card" onclick="toggle(this)">
-<strong>DOSSIER 4 – MENTONE / LOOKOUT MOUNTAIN, AL</strong>
-<div class="details">
-Quiet, romantic mountain escape.<br>
-Activities: DeSoto Falls, Little River Canyon, cafés.<br>
-Cheapest: Winter, early spring.
-</div>
-</div>
+    <!-- Screen 5: Final Decision -->
+    <div id="screen5" class="screen">
+        <div class="classified-header">
+            <h2>MISSION DECISION</h2>
+            <p class="subtitle">/// AWAITING CONFIRMATION ///</p>
+        </div>
+        <div class="content-box">
+            <p class="mission-text" style="text-align: center; font-size: 1.2em;">
+                You have reviewed all available intelligence, Agent.
+            </p>
+            <p class="mission-text" style="text-align: center;">
+                The final decision is yours. Choose the destination that calls to you, and we will execute this mission together.
+            </p>
+            <p style="text-align: center; color: #888; margin-top: 20px;">
+                Remember: There are no wrong choices, only adventures waiting to happen.
+            </p>
+        </div>
+        <button class="btn" onclick="acceptMission()">ACCEPT MISSION</button>
+        <div id="finalMessage" class="final-message">
+            <h2>MISSION ACCEPTED!</h2>
+            <p style="font-size: 1.1em; margin-top: 15px;">
+                Excellent work, Agent. Your decision has been logged and the operation is now in motion.
+            </p>
+            <p style="color: #ffbf00; margin-top: 20px; font-size: 1.2em;">
+                Let's make some unforgettable memories together! ❤️
+            </p>
+            <p style="color: #888; margin-top: 20px; font-size: 0.9em;">
+                /// THIS MESSAGE WILL SELF-DESTRUCT... NEVER ///
+            </p>
+        </div>
+    </div>
 
-<div class="card" onclick="toggle(this)">
-<strong>DOSSIER 5 – FAIRHOPE, AL</strong>
-<div class="details">
-Charming coastal town on Mobile Bay.<br
+    <script>
+        function goToScreen(screenNumber) {
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.classList.remove('active'));
+            document.getElementById('screen' + screenNumber).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function toggleDossier(dossierNumber) {
+            const dossier = document.getElementById('dossier' + dossierNumber);
+            dossier.classList.toggle('show');
+        }
+
+        function acceptMission() {
+            const message = document.getElementById('finalMessage');
+            message.classList.add('show');
+        }
+    </script>
+</body>
+</html>
