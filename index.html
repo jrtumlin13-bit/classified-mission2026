@@ -1,126 +1,157 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Operation Getaway</title>
+  <title>CLASSIFIED MISSION</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Courier New', monospace;
       background: #0b0f14;
-      color: #e6e6e6;
+      color: #e6f5e6;
     }
-    .container {
-      max-width: 900px;
-      margin: auto;
+    .screen {
+      display: none;
+      min-height: 100vh;
       padding: 40px 20px;
+      box-sizing: border-box;
     }
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
-      border: 1px solid #ff3b3b;
-      color: #ff3b3b;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    h2 {
-      font-size: 1.4rem;
-      margin-top: 40px;
-    }
-    .redacted {
-      background: #000;
-      color: #000;
-      padding: 2px 6px;
-      margin: 0 4px;
-    }
-    .mission-box {
-      border: 1px solid #444;
-      padding: 20px;
-      margin-top: 30px;
-      background: #111820;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .card {
-      border: 1px solid #333;
-      padding: 15px;
-      background: #0f1620;
+    .screen.active { display: block; }
+    h1, h2, h3 { color: #7CFF9E; }
+    .center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
-    .card img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      margin-bottom: 10px;
-      filter: grayscale(100%);
+    button {
+      margin-top: 25px;
+      padding: 14px 22px;
+      background: transparent;
+      color: #7CFF9E;
+      border: 2px solid #7CFF9E;
+      font-size: 1rem;
+      cursor: pointer;
     }
-    .button {
-      display: inline-block;
-      margin-top: 40px;
-      padding: 14px 24px;
-      border: 2px solid #4caf50;
-      color: #4caf50;
-      text-decoration: none;
-      font-weight: bold;
+    button:hover { background: #7CFF9E; color: #000; }
+    .card {
+      border: 1px solid #3f5f4b;
+      padding: 16px;
+      margin: 15px 0;
+      cursor: pointer;
     }
-    .footer {
-      margin-top: 60px;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
+    .details { display: none; margin-top: 10px; color: #cfeacf; }
+    .toggle { margin-top: 10px; }
+    .footer { margin-top: 40px; opacity: 0.7; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="badge">CLASSIFIED</div><h1>OPERATION: GETAWAY</h1>
-<p><strong>Target:</strong> [Wife's Name]</p>
-<p><strong>Handler:</strong> [Your Name]</p>
 
-<div class="mission-box">
-  <h2>Mission Brief</h2>
-  <p>
-    The subject has been approved for a fully funded vacation to a location of her choosing.
-    All planning, logistics, and execution will be handled by her assigned agent.
-  </p>
-  <p>
-    Destination remains <span class="redacted">REDACTED</span> pending subject selection.
-  </p>
+<!-- SCREEN 1 -->
+<div id="screen1" class="screen active center">
+  <h1>CLASSIFIED MISSION</h1>
+  <p>Unauthorized access is prohibited.</p>
+  <button onclick="nextScreen(2)">BEGIN MISSION BRIEFING</button>
 </div>
 
-<h2>Potential Destination Profiles</h2>
-<div class="grid">
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Beach" />
-    <strong>Warm / Relaxing</strong>
-  </div>
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470" alt="Mountains" />
-    <strong>Cool / Scenic</strong>
-  </div>
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1494526585095-c41746248156" alt="City" />
-    <strong>Urban / Explore</strong>
-  </div>
-  <div class="card">
-    <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4" alt="Cozy" />
-    <strong>Quiet / Cozy</strong>
-  </div>
+<!-- SCREEN 2 -->
+<div id="screen2" class="screen center">
+  <h2>AGENT VERIFICATION</h2>
+  <p>Tap to verify identity.</p>
+  <button onclick="nextScreen(3)">VERIFY AGENT</button>
+  <p class="footer">ACCESS GRANTED, AGENT</p>
 </div>
 
-<a class="button" href="[PASTE GOOGLE FORM LINK HERE]">SUBMIT DESTINATION</a>
-
-<div class="footer">
-  Unauthorized disclosure of this operation may result in mandatory cuddling.
+<!-- SCREEN 3 -->
+<div id="screen3" class="screen">
+  <h2>MISSION BRIEFING</h2>
+  <p>Your mission, should you choose to accept it, is to select our next vacation destination.</p>
+  <ul>
+    <li>⏱ 3–4 nights (4–5 days)</li>
+    <li>💰 Budget-conscious</li>
+    <li>✈️ Departing from Birmingham, Alabama</li>
+    <li>📅 Travel window: Summer, December, or Spring Break</li>
+    <li>🍽 Focus on food, relaxing, light adventure</li>
+  </ul>
+  <button onclick="nextScreen(4)">VIEW DESTINATION DOSSIERS</button>
 </div>
 
+<!-- SCREEN 4 -->
+<div id="screen4" class="screen">
+  <h2>DESTINATION DOSSIERS</h2>
+
+  <div class="card" onclick="toggle(this)">
+    <strong>DOSSIER 1 – GULF SHORES / ORANGE BEACH, AL</strong>
+    <div class="details">
+      Beach time, seafood, relaxation.<br>
+      Activities: beach walks, Gulf State Park, seafood dining.<br>
+      Cheapest: December, early spring.
+    </div>
   </div>
+
+  <div class="card" onclick="toggle(this)">
+    <strong>DOSSIER 2 – CHATTANOOGA, TN</strong>
+    <div class="details">
+      Walkable downtown with mountain views.<br>
+      Activities: Tennessee Aquarium, Lookout Mountain, food scene.<br>
+      Cheapest: Winter, early spring.
+    </div>
+  </div>
+
+  <div class="card" onclick="toggle(this)">
+    <strong>DOSSIER 3 – BLUE RIDGE, GA</strong>
+    <div class="details">
+      Cozy mountain cabin vibes.<br>
+      Activities: hiking, waterfalls, scenic drives.<br>
+      Cheapest: Late winter, early spring.
+    </div>
+  </div>
+
+  <div class="card" onclick="toggle(this)">
+    <strong>DOSSIER 4 – MENTONE / LOOKOUT MOUNTAIN, AL</strong>
+    <div class="details">
+      Quiet, romantic mountain escape.<br>
+      Activities: DeSoto Falls, Little River Canyon, cafés.<br>
+      Cheapest: Winter, early spring.
+    </div>
+  </div>
+
+  <div class="card" onclick="toggle(this)">
+    <strong>DOSSIER 5 – FAIRHOPE, AL</strong>
+    <div class="details">
+      Charming coastal town on Mobile Bay.<br>
+      Activities: pier walks, sunsets, food, shopping.<br>
+      Cheapest: Winter, early spring.
+    </div>
+  </div>
+
+  <button onclick="nextScreen(5)">FINAL DECISION</button>
+</div>
+
+<!-- SCREEN 5 -->
+<div id="screen5" class="screen center">
+  <h2>FINAL DECISION</h2>
+  <p>The final decision is yours, Agent.</p>
+  <button onclick="acceptMission()">ACCEPT MISSION</button>
+  <p id="finalMsg" class="footer"></p>
+</div>
+
+<script>
+  function nextScreen(n) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + n).classList.add('active');
+    window.scrollTo(0,0);
+  }
+  function toggle(card) {
+    const d = card.querySelector('.details');
+    d.style.display = d.style.display === 'block' ? 'none' : 'block';
+  }
+  function acceptMission() {
+    document.getElementById('finalMsg').innerText = 'Mission accepted. Your handler will take care of everything.';
+  }
+</script>
+
 </body>
 </html>
