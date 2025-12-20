@@ -1,795 +1,538 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLASSIFIED - Mission Briefing</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background: #0a0a0a;
-            color: #e0e0e0;
-            overflow-x: hidden;
-        }
-
-        .screen {
-            display: none;
-            min-height: 100vh;
-            padding: 20px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Header Styling */
-        .header {
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom: 2px solid #c41e3a;
-            margin-bottom: 40px;
-            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-        }
-
-        .classified-stamp {
-            color: #c41e3a;
-            font-size: 14px;
-            letter-spacing: 8px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin: 10px 0;
-        }
-
-        .header p {
-            color: #888;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            background: #1a1a1a;
-            height: 4px;
-            margin: 20px 0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: #c41e3a;
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Season Grid */
-        .season-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 40px 0;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .season-card {
-            background: #1a1a1a;
-            border: 2px solid #333;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .season-card:hover {
-            border-color: #c41e3a;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
-        }
-
-        .season-card h2 {
-            color: #c41e3a;
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .season-card p {
-            color: #888;
-            font-size: 0.9em;
-        }
-
-        /* Destination List */
-        .destination-list {
-            display: grid;
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .destination-item {
-            background: #1a1a1a;
-            border-left: 4px solid #c41e3a;
-            padding: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .destination-item:hover {
-            background: #222;
-            transform: translateX(10px);
-        }
-
-        .destination-item h3 {
-            color: #fff;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .destination-item .code-name {
-            color: #888;
-            font-size: 0.95em;
-            margin-top: 5px;
-        }
-
-        .destination-item .subtitle {
-            color: #c41e3a;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Mission File */
-        .mission-file {
-            background: #1a1a1a;
-            border: 2px solid #333;
-            padding: 40px;
-            margin: 20px 0;
-        }
-
-        .mission-file h2 {
-            color: #c41e3a;
-            font-size: 2em;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .mission-file h3 {
-            color: #fff;
-            font-size: 1.3em;
-            margin: 25px 0 15px 0;
-            text-transform: uppercase;
-        }
-
-        .mission-file p {
-            line-height: 1.8;
-            margin-bottom: 15px;
-            color: #ccc;
-        }
-
-        .mission-file ul {
-            list-style: none;
-            margin: 15px 0;
-        }
-
-        .mission-file li {
-            padding: 8px 0;
-            color: #ccc;
-            border-bottom: 1px solid #222;
-        }
-
-        .mission-file li:before {
-            content: "▸ ";
-            color: #c41e3a;
-            margin-right: 10px;
-        }
-
-        .mission-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            margin: 20px 0;
-            border: 2px solid #333;
-        }
-
-        /* Decrypt Button */
-        .decrypt-btn {
-            background: #c41e3a;
-            color: #fff;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1em;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .decrypt-btn:hover {
-            background: #a01828;
-            transform: scale(1.05);
-        }
-
-        .hidden-content {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .hidden-content.revealed {
-            display: block;
-        }
-
-        /* Back Button */
-        .back-btn {
-            background: transparent;
-            color: #c41e3a;
-            border: 2px solid #c41e3a;
-            padding: 12px 30px;
-            font-size: 0.9em;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 20px 10px 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: #c41e3a;
-            color: #fff;
-        }
-
-        /* Budget Tag */
-        .budget-tag {
-            display: inline-block;
-            background: #2a4a2a;
-            color: #7cfc00;
-            padding: 8px 20px;
-            font-size: 1em;
-            margin: 20px 0;
-            border-radius: 3px;
-            letter-spacing: 1px;
-        }
-
-        .agent-allocation {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: #1a1a1a;
-            border: 2px solid #2a4a2a;
-        }
-
-        .agent-allocation h3 {
-            color: #7cfc00;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .agent-allocation p {
-            color: #ccc;
-            font-size: 0.9em;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .season-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .mission-file {
-                padding: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <script>
-        // Navigation system
-        let currentSeason = '';
-
-        function showScreen(screenId) {
-            // Hide all screens
-            const screens = document.querySelectorAll('.screen');
-            screens.forEach(screen => screen.classList.remove('active'));
-            
-            // Show selected screen
-            const targetScreen = document.getElementById(screenId);
-            if (targetScreen) {
-                targetScreen.classList.add('active');
-                window.scrollTo(0, 0);
-            }
-        }
-
-        function showLanding() {
-            showScreen('landing');
-        }
-
-        function showIntro() {
-            showScreen('intro');
-        }
-
-        function showSeasonSelect() {
-            showScreen('season-select');
-        }
-
-        function showSeasonScreen(season) {
-            currentSeason = season;
-            showScreen(season);
-        }
-
-        function showMission(season, location) {
-            const missionId = 'mission-' + season + '-' + location;
-            showScreen(missionId);
-        }
-
-        function toggleContent(contentId) {
-            const content = document.getElementById(contentId);
-            if (content) {
-                content.classList.toggle('revealed');
-            }
-        }
-    </script>
-
-    <!-- INTRO SCREEN -->
-    <div id="intro" class="screen active">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ TOP SECRET ★</div>
-                <h1>Classified Mission</h1>
-                <p>Authorization Required</p>
-            </div>
-
-            <div class="mission-file" style="text-align: center; padding: 60px 40px;">
-                <h2>Operation: Getaway</h2>
-                <p style="margin: 30px 0; font-size: 1.1em;">This briefing contains classified vacation intelligence.</p>
-                <p style="margin: 30px 0;">You have been selected for a series of covert operations designed for rest, romance, and reconnaissance of Alabama's finest destinations.</p>
-                
-                <div class="agent-allocation">
-                    <h3>Agent Allocation</h3>
-                    <p>Approved: $800 per mission</p>
-                </div>
-                
-                <button class="decrypt-btn" onclick="showSeasonSelect()" style="margin-top: 40px;">▶ AUTHORIZATION GRANTED - BEGIN BRIEFING</button>
-            </div>
+<div class="info-section">
+            <h3>ACTIVITIES & INTEL</h3>
+            <p>🎨 Downtown art galleries (FREE)<br>
+            🌉 Fairhope Pier & bay sunsets<br>
+            🛍️ Boutique shopping district<br>
+            🍷 Wine bars & craft cocktails<br>
+            🍴 Farm-to-table dining scene<br>
+            🏖️ Nearby Gulf beaches (30 min drive)</p>
         </div>
-    </div>
 
-    <!-- SEASON SELECT SCREEN -->
-    <div id="season-select" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ MISSION BRIEFING ★</div>
-                <h1>Select Deployment Season</h1>
-                <p>Choose your tactical window</p>
+        <div class="lodging-section">
+            <p class="detail-label">LODGING OPTIONS:</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/fhinn1/400/300" alt="Inn" class="option-image">
+                <div class="option-details">
+                    <h4>Downtown Boutique Inn</h4>
+                    <p>~$120-150/night | Walking to everything, complimentary breakfast<br>
+                    <strong>3 nights = $360-450</strong></p>
+                </div>
             </div>
-
-            <button class="back-btn" onclick="showIntro()">← Back to Briefing</button>
-
-            <div class="season-grid">
-                <div class="season-card" onclick="showSeasonScreen('spring')">
-                    <h2>Spring</h2>
-                    <p>Operation: Bloom</p>
-                </div>
-                <div class="season-card" onclick="showSeasonScreen('summer')">
-                    <h2>Summer</h2>
-                    <p>Operation: Coastline</p>
-                </div>
-                <div class="season-card" onclick="showSeasonScreen('fall')">
-                    <h2>Fall</h2>
-                    <p>Operation: Foliage</p>
-                </div>
-                <div class="season-card" onclick="showSeasonScreen('winter')">
-                    <h2>Winter</h2>
-                    <p>Operation: Retreat</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/fhbnb1/400/300" alt="B&B" class="option-image">
+                <div class="option-details">
+                    <h4>Bay View B&B</h4>
+                    <p>~$140-170/night | Waterfront views, gourmet breakfast, charming<br>
+                    <strong>3 nights = $420-510</strong></p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- SPRING SEASON SCREEN -->
-    <div id="spring" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ SPRING OPERATIONS ★</div>
-                <h1>Available Missions</h1>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%"></div>
+        <div class="itinerary-section">
+            <p class="detail-label">3-DAY SAMPLE ITINERARY:</p>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/fhtown1/400/300" alt="Downtown" class="option-image">
+                <div class="option-details">
+                    <h4>Day 1: Arts & Downtown</h4>
+                    <p>Arrival, gallery hopping, boutique shopping, pier sunset, fine dining ($70-90)</p>
                 </div>
             </div>
-
-            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
-
-            <div class="destination-list">
-                <div class="destination-item" onclick="showMission('spring', 'chattanooga')">
-                    <div class="subtitle">Mission File #001</div>
-                    <h3>River City Reconnaissance</h3>
-                    <div class="code-name">Target: Chattanooga, Tennessee</div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/fhbay1/400/300" alt="Bay" class="option-image">
+                <div class="option-details">
+                    <h4>Day 2: Bay & Beach</h4>
+                    <p>Kayak bay morning ($40), Gulf beach afternoon, casual waterfront dinner ($50-60)</p>
                 </div>
-                <div class="destination-item" onclick="showMission('spring', 'blueridge')">
-                    <div class="subtitle">Mission File #002</div>
-                    <h3>Mountain Pass Operation</h3>
-                    <div class="code-name">Target: Blue Ridge, Georgia</div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/fhfood1/400/300" alt="Food" class="option-image">
+                <div class="option-details">
+                    <h4>Day 3: Culinary Tour</h4>
+                    <p>Farmers market, brunch at local café ($40), wine tasting ($30-40), departure</p>
                 </div>
             </div>
         </div>
+
+        <div class="info-section">
+            <h3>BUDGET BREAKDOWN</h3>
+            <p><strong>Lodging:</strong> $360-510 (B&B with breakfast included)<br>
+            <strong>Food:</strong> $160-190 (dining out, some meals included)<br>
+            <strong>Activities:</strong> $70-80 (kayak, wine tasting)<br>
+            <strong>Gas:</strong> ~$45 round trip<br>
+            <span style="color: #ffbf00; font-size: 1.1em;"><strong>TOTAL: $635-825</strong></span></p>
+        </div>
+
+        <button class="btn" onclick="goToScreen(999)">SELECT THIS DESTINATION</button>
     </div>
+</div>
 
-    <!-- SUMMER SEASON SCREEN -->
-    <div id="summer" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ SUMMER OPERATIONS ★</div>
-                <h1>Available Missions</h1>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 25%"></div>
-                </div>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
-
-            <div class="destination-list">
-                <div class="destination-item" onclick="showMission('summer', 'gulfshores')">
-                    <div class="subtitle">Mission File #003</div>
-                    <h3>Coastal Infiltration</h3>
-                    <div class="code-name">Target: Gulf Shores, Alabama</div>
-                </div>
-                <div class="destination-item" onclick="showMission('summer', 'fairhope')">
-                    <div class="subtitle">Mission File #004</div>
-                    <h3>Bayside Deployment</h3>
-                    <div class="code-name">Target: Fairhope, Alabama</div>
-                </div>
-            </div>
+<!-- Screen 300: Fall Operations Menu -->
+<div id="screen300" class="screen">
+    <button class="back-btn" onclick="goToScreen(3)">← SEASONS</button>
+    <div class="classified-header">
+        <h2>🍂 FALL OPERATIONS</h2>
+        <p class="subtitle">/// SELECT YOUR OPERATION ///</p>
+    </div>
+    <div class="season-grid">
+        <div class="season-card" onclick="goToScreen(301)">
+            <h3>OPERATION: SMOKY RIDGE</h3>
+            <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">GATLINBURG / PIGEON FORGE, TN</p>
+            <p style="font-size: 0.85em; margin-top: 10px;">Smokies • Fall Foliage • Attractions</p>
+        </div>
+        <div class="season-card" onclick="goToScreen(302)">
+            <h3>OPERATION: ALPINE FEST</h3>
+            <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">HELEN, GA</p>
+            <p style="font-size: 0.85em; margin-top: 10px;">Bavarian Village • Oktoberfest</p>
         </div>
     </div>
+</div>
 
-    <!-- FALL SEASON SCREEN -->
-    <div id="fall" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ FALL OPERATIONS ★</div>
-                <h1>Available Missions</h1>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 50%"></div>
-                </div>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
-
-            <div class="destination-list">
-                <div class="destination-item" onclick="showMission('fall', 'gatlinburg')">
-                    <div class="subtitle">Mission File #005</div>
-                    <h3>Smoky Mountain Ascent</h3>
-                    <div class="code-name">Target: Gatlinburg / Pigeon Forge, Tennessee</div>
-                </div>
-                <div class="destination-item" onclick="showMission('fall', 'helen')">
-                    <div class="subtitle">Mission File #006</div>
-                    <h3>Alpine Village Survey</h3>
-                    <div class="code-name">Target: Helen, Georgia</div>
-                </div>
-            </div>
+<!-- Screen 301: Fall - Gatlinburg/Pigeon Forge -->
+<div id="screen301" class="screen">
+    <button class="back-btn" onclick="goToScreen(300)">← OPERATIONS</button>
+    <div class="destination-page">
+        <div class="classified-header">
+            <h2>🍂 OPERATION: SMOKY RIDGE</h2>
+            <p class="subtitle">/// GATLINBURG / PIGEON FORGE, TN ///</p>
         </div>
-    </div>
-
-    <!-- WINTER SEASON SCREEN -->
-    <div id="winter" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ WINTER OPERATIONS ★</div>
-                <h1>Available Missions</h1>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%"></div>
-                </div>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
-
-            <div class="destination-list">
-                <div class="destination-item" onclick="showMission('winter', 'mentone')">
-                    <div class="subtitle">Mission File #007</div>
-                    <h3>Highland Retreat</h3>
-                    <div class="code-name">Target: Mentone, Alabama</div>
-                </div>
-                <div class="destination-item" onclick="showMission('winter', 'franklin')">
-                    <div class="subtitle">Mission File #008</div>
-                    <h3>Music City Expedition</h3>
-                    <div class="code-name">Target: Franklin / Nashville, Tennessee</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MISSION DETAIL SCREENS -->
-    <!-- Chattanooga Spring -->
-    <div id="mission-spring-chattanooga" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ MISSION FILE #001 ★</div>
-                <h1>Chattanooga, TN</h1>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonScreen('spring')">← Back to Spring Missions</button>
-
-            <div class="mission-file">
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=CHATTANOOGA+WATERFRONT+IMAGE" alt="Chattanooga" class="mission-image">
-
-                <h2>Mission Overview</h2>
-                <p>Chattanooga delivers a perfect spring escape with mild temperatures, blooming landscapes, and the iconic Tennessee River winding through downtown. This mission combines outdoor adventure with world-class attractions, all within a 2-hour drive from Birmingham.</p>
-                
-                <h3>Why Spring?</h3>
-                <p>Spring (March-May) brings perfect hiking weather, fewer crowds than summer, and the city comes alive with outdoor festivals. The Riverwalk and Lookout Mountain are spectacular with spring blooms.</p>
-
-                <h3>Best Time to Deploy</h3>
-                <p><strong>Target Window:</strong> Mid-March to early May, Tuesday-Thursday stays for best rates. Avoid holiday weekends and major event dates.</p>
-
-                <button class="decrypt-btn" onclick="toggleContent('chatt-itinerary')">▶ DECRYPT ITINERARY</button>
-
-                <div id="chatt-itinerary" class="hidden-content">
-                    <h3>Sample 3-Night Mission Plan</h3>
-                    <ul>
-                        <li><strong>Day 1:</strong> Arrive mid-day, check into downtown hotel. Walk the Riverwalk, grab dinner at Tupelo Honey or Terminal Brewhouse. Evening stroll across Walnut Street Bridge.</li>
-                        <li><strong>Day 2:</strong> Tennessee Aquarium (one of the best freshwater aquariums in the world). Lunch at Public House. Afternoon: Incline Railway up Lookout Mountain, explore Ruby Falls or Rock City. Dinner at St. John's Restaurant.</li>
-                        <li><strong>Day 3:</strong> Breakfast at Bluegrass Grill. Morning hike at Cloudland Canyon State Park (40 min drive). Picnic lunch. Return for downtown shopping/art district. Dinner at Easy Bistro & Bar.</li>
-                        <li><strong>Day 4:</strong> Breakfast at Milk & Honey, last Riverwalk stroll, depart after lunch.</li>
-                    </ul>
-                </div>
-
-                <h3>Food Intelligence</h3>
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=CHATTANOOGA+FOOD+SCENE+IMAGE" alt="Chattanooga Food" class="mission-image">
-                <ul>
-                    <li><strong>Tupelo Honey:</strong> Southern comfort food with upscale twist (shrimp & grits, fried chicken)</li>
-                    <li><strong>St. John's Restaurant:</strong> Fine dining in a historic meeting house</li>
-                    <li><strong>Terminal Brewhouse:</strong> BBQ and craft beer in renovated train station</li>
-                    <li><strong>Easy Bistro & Bar:</strong> Farm-to-table with excellent cocktails</li>
-                    <li><strong>Public House:</strong> Elevated pub fare, rooftop seating</li>
-                </ul>
-
-                <h3>Mission Activities</h3>
-                <ul>
-                    <li><strong>Tennessee Aquarium:</strong> World-class freshwater exhibits, river otters, penguins</li>
-                    <li><strong>Lookout Mountain:</strong> Incline Railway, Ruby Falls (underground waterfall), Rock City</li>
-                    <li><strong>Riverwalk:</strong> 13 miles of scenic walking/biking paths along the Tennessee River</li>
-                    <li><strong>Hunter Museum of Art:</strong> Stunning bluff-side location, excellent collection</li>
-                    <li><strong>Cloudland Canyon:</strong> Hiking, waterfalls, stunning canyon views</li>
-                </ul>
-
-                <h3>Spa Options</h3>
-                <p>The Edwin Hotel features a spa with massage services. Alternatively, Woodhouse Day Spa downtown offers full spa packages including couples massages.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Blue Ridge Spring -->
-    <div id="mission-spring-blueridge" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ MISSION FILE #002 ★</div>
-                <h1>Blue Ridge, GA</h1>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonScreen('spring')">← Back to Spring Missions</button>
-
-            <div class="mission-file">
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=BLUE+RIDGE+MOUNTAINS+IMAGE" alt="Blue Ridge" class="mission-image">
-
-                <h2>Mission Overview</h2>
-                <p>Blue Ridge is a charming mountain town offering a cozy, romantic escape. Known for its scenic railway, hiking trails, and quaint downtown, this mission is perfect for couples seeking relaxation and natural beauty just 2.5 hours from Birmingham.</p>
-                
-                <h3>Why Spring?</h3>
-                <p>Spring brings wildflowers, rushing waterfalls at peak flow, and pleasant hiking temperatures. The town is less crowded than fall, and cabin rentals offer mid-week discounts.</p>
-
-                <h3>Best Time to Deploy</h3>
-                <p><strong>Target Window:</strong> Late March through May, Tuesday-Thursday for cabin deals. Avoid spring break weeks.</p>
-
-                <button class="decrypt-btn" onclick="toggleContent('blueridge-itinerary')">▶ DECRYPT ITINERARY</button>
-
-                <div id="blueridge-itinerary" class="hidden-content">
-                    <h3>Sample 3-Night Mission Plan</h3>
-                    <ul>
-                        <li><strong>Day 1:</strong> Arrive at cabin, settle in. Afternoon: Explore downtown Blue Ridge shops and galleries. Dinner at Harvest on Main. Evening: Hot tub and stargazing.</li>
-                        <li><strong>Day 2:</strong> Blue Ridge Scenic Railway (4-hour roundtrip through mountains). Lunch at depot or pack a picnic. Afternoon: Wine tasting at Bear Claw Vineyards. Dinner at Treo's Pasta Kitchen.</li>
-                        <li><strong>Day 3:</strong> Hike to Long Creek Falls (2 miles, stunning waterfall). Pack lunch. Afternoon: Relax at cabin or visit Mercier Orchards. Dinner at Jim's Smokin' Que.</li>
-                        <li><strong>Day 4:</strong> Morning at Toccoa River for scenic views, coffee at Blue Ridge Coffee & Tea Co., depart after lunch.</li>
-                    </ul>
-                </div>
-
-                <h3>Food Intelligence</h3>
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=BLUE+RIDGE+DINING+IMAGE" alt="Blue Ridge Food" class="mission-image">
-                <ul>
-                    <li><strong>Harvest on Main:</strong> Farm-to-table Southern cuisine, rotating seasonal menu</li>
-                    <li><strong>Treo's Pasta Kitchen:</strong> Homemade pasta, intimate Italian spot</li>
-                    <li><strong>Jim's Smokin' Que:</strong> Award-winning BBQ, huge portions</li>
-                    <li><strong>Black Sheep Restaurant:</strong> Upscale tavern fare with mountain views</li>
-                    <li><strong>Mercier Orchards:</strong> Apple pies, cider, country store (30 min north)</li>
-                </ul>
-
-                <h3>Mission Activities</h3>
-                <ul>
-                    <li><strong>Blue Ridge Scenic Railway:</strong> Historic train through Chattahoochee National Forest</li>
-                    <li><strong>Hiking:</strong> Long Creek Falls, Springer Mountain, Benton MacKaye Trail</li>
-                    <li><strong>Toccoa River:</strong> Tubing, fishing, riverside picnic spots</li>
-                    <li><strong>Downtown Blue Ridge:</strong> Antique shops, art galleries, local crafts</li>
-                    <li><strong>Bear Claw Vineyards:</strong> Wine tasting with mountain views</li>
-                </ul>
-
-                <h3>Spa Options</h3>
-                <p>Many cabin rentals include hot tubs. For professional spa services, The Spa at River's Edge offers massage and facials by appointment in nearby Ellijay (20 minutes).</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Gulf Shores Summer -->
-    <div id="mission-summer-gulfshores" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ MISSION FILE #003 ★</div>
-                <h1>Gulf Shores, AL</h1>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonScreen('summer')">← Back to Summer Missions</button>
-
-            <div class="mission-file">
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://via.placeholder.com/900x300/1a1a1a/c41e3a?text=Gulf+Shores+Beach" alt="Gulf Shores" class="mission-image">
-
-                <h2>Mission Overview</h2>
-                <p>Gulf Shores offers white sand beaches, fresh Gulf seafood, and endless water activities. This classic beach getaway is just 4 hours from Birmingham and delivers the ultimate summer coastal experience at a fraction of Florida prices.</p>
-                
-                <h3>Why Summer?</h3>
-                <p>Summer is peak beach season with warm Gulf waters perfect for swimming. While it's the busiest time, strategic timing and condo rentals keep costs manageable.</p>
-
-                <h3>Best Time to Deploy</h3>
-                <p><strong>Target Window:</strong> Early June or late August (shoulder weeks). Mid-week Sunday-Thursday stays offer significant savings. Avoid July 4th and spring break overlap.</p>
-
-                <button class="decrypt-btn" onclick="toggleContent('gulfshores-itinerary')">▶ DECRYPT ITINERARY</button>
-
-                <div id="gulfshores-itinerary" class="hidden-content">
-                    <h3>Sample 3-Night Mission Plan</h3>
-                    <ul>
-                        <li><strong>Day 1:</strong> Arrive, check into beachfront condo. Afternoon beach time. Sunset at Gulf State Park Pier. Dinner at The Hangout (live music, beach vibes).</li>
-                        <li><strong>Day 2:</strong> Morning beach walk and swim. Lunch at LuLu's (waterfront, owned by Jimmy Buffett's sister). Afternoon: Dolphin cruise or kayak rental. Dinner at Fisher's Upstairs (fine dining with sunset views).</li>
-                        <li><strong>Day 3:</strong> Breakfast at Another Broken Egg. Visit Gulf State Park Nature Center, hike the trails. Beach time. Lunch at Tacky Jack's. Evening: Mini golf at The Park. Dinner at Cobalt Restaurant.</li>
-                        <li><strong>Day 4:</strong> Final beach morning, breakfast at condo, depart after lunch.</li>
-                    </ul>
-                </div>
-
-                <h3>Food Intelligence</h3>
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://via.placeholder.com/900x300/1a1a1a/7cfc00?text=Gulf+Coast+Seafood" alt="Gulf Shores Food" class="mission-image">
-                <ul>
-                    <li><strong>Fisher's Upstairs:</strong> Upscale seafood, incredible sunset views, reservations essential</li>
-                    <li><strong>The Hangout:</strong> Casual beach bar with live music, shrimp baskets, frozen drinks</li>
-                    <li><strong>LuLu's:</strong> Fun waterfront atmosphere, gumbo, fried seafood platters</li>
-                    <li><strong>Cobalt Restaurant:</strong> Fresh Gulf fish, elegant but relaxed</li>
-                    <li><strong>Tacky Jack's:</strong> Local favorite for oysters and fried green tomatoes</li>
-                </ul>
-
-                <h3>Mission Activities</h3>
-                <ul>
-                    <li><strong>Beach Time:</strong> Swimming, sunbathing, beach walking along miles of white sand</li>
-                    <li><strong>Gulf State Park:</strong> 6,500 acres with trails, fishing pier, nature center</li>
-                    <li><strong>Dolphin Cruises:</strong> Multiple operators offer sunset and dolphin watching tours</li>
-                    <li><strong>Water Sports:</strong> Paddleboarding, kayaking, jet ski rentals</li>
-                    <li><strong>The Wharf:</strong> Shopping, dining, Ferris wheel, evening entertainment</li>
-                </ul>
-
-                <h3>Spa Options</h3>
-                <p>Spa at The Beach Club offers full spa services including couples massages, facials, and body treatments. Book ahead during summer months.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Fairhope Summer -->
-    <div id="mission-summer-fairhope" class="screen">
-        <div class="container">
-            <div class="header">
-                <div class="classified-stamp">★ MISSION FILE #004 ★</div>
-                <h1>Fairhope, AL</h1>
-            </div>
-
-            <button class="back-btn" onclick="showSeasonScreen('summer')">← Back to Summer Missions</button>
-
-            <div class="mission-file">
-                <!-- IMAGE: Replace URL below -->
-                <img src="data:image/jpeg;base64,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">
-
-                <h2>Mission Overview</h2>
-                <p>Fairhope is a charming bayside town offering art galleries, boutique shopping, and spectacular sunsets over Mobile Bay. This mission combines coastal beauty with small-town Southern hospitality, just 3.5 hours from Birmingham.</p>
-                
-                <h3>Why Summer?</h3>
-                <p>Summer brings warm bay waters, outdoor concerts, and the famous Fairhope sunsets. The town's tree-lined streets provide shade, and bay breezes keep temperatures pleasant.</p>
-
-                <h3>Best Time to Deploy</h3>
-                <p><strong>Target Window:</strong> Early June or late August, mid-week stays. Avoid Fourth of July and Arts & Crafts Festival weekends for better rates.</p>
-
-                <button class="decrypt-btn" onclick="toggleContent('fairhope-itinerary')">▶ DECRYPT ITINERARY</button>
-
-                <div id="fairhope-itinerary" class="hidden-content">
-                    <h3>Sample 3-Night Mission Plan</h3>
-                    <ul>
-                        <li><strong>Day 1:</strong> Arrive, check into B&B or hotel. Stroll downtown Fairhope Avenue, explore galleries and shops. Sunset at Fairhope Pier. Dinner at Panini Pete's.</li>
-                        <li><strong>Day 2:</strong> Breakfast at Old 27 Grill. Morning at Weeks Bay Reserve for kayaking/nature trails. Lunch at Thyme by the Bay. Afternoon: Browse art galleries and boutiques. Dinner at Sunset Pointe at Fly Creek.</li>
-                        <li><strong>Day 3:</strong> Breakfast at Cafe Beignet. Day trip to Bellingrath Gardens (30 min). Picnic lunch on grounds. Return for downtown coffee shop time. Dinner at Dragonfly Foodbar. Evening concert at Fairhope Pier (check schedule).</li>
-                        <li><strong>Day 4:</strong> Final pier walk, breakfast at Greer's, last-minute shopping, depart.</li>
-                    </ul>
-                </div>
-
-                <h3>Food Intelligence</h3>
-                <!-- IMAGE: Replace URL below -->
-                <img src="https://via.placeholder.com/900x300/1a1a1a/7cfc00?text=Fairhope+Cuisine" alt="Fairhope Food" class="mission-image">
-                <ul>
-                    <li><strong>Sunset Pointe:</strong> Waterfront dining with stunning bay views, fresh seafood</li>
-                    <li><strong>Panini Pete's:</strong> Creative paninis, salads, excellent wine list</li>
-                    <li><strong>Dragonfly Foodbar:</strong> Farm-to-table Southern fusion, intimate atmosphere</li>
-targetScreen.style.display = 'flex';
-}
-// Activate matrix only on screen 1
-        if (screenNumber === 1) {
-            canvas.classList.add('active');
-            if (!matrixInterval) {
-                matrixInterval = setInterval(drawMatrix, 33);
-            }
-        } else {
-            canvas.classList.remove('active');
-        }
         
-        window.scrollTo(0, 0);
+        <img src="https://picsum.photos/seed/gatlinburg1/1000/300" alt="Gatlinburg" class="destination-hero">
+        
+        <div class="info-section">
+            <h3>MISSION OVERVIEW</h3>
+            <p><span class="detail-label">LOCATION:</span> Great Smoky Mountains, Tennessee (3.5 hours from Birmingham)</p>
+            <p><span class="detail-label">OPTIMAL SEASON:</span> Fall (Sep-Nov) for SPECTACULAR fall foliage</p>
+            <p style="margin-top: 15px;">Mountain resort towns at the gateway to Great Smoky Mountains National Park. Fall colors are absolutely stunning. Mix of natural beauty, mountain attractions, and entertainment.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>ACTIVITIES & INTEL</h3>
+            <p>🍁 Great Smoky Mountains NP hiking (FREE)<br>
+            🚡 Ober Gatlinburg aerial tram ($30/person)<br>
+            🎡 Dollywood theme park ($85/person - optional)<br>
+            🌉 Gatlinburg SkyBridge ($35/person)<br>
+            🥞 Pancake houses & mountain dining<br>
+            🎭 Shows & entertainment</p>
+        </div>
+
+        <div class="lodging-section">
+            <p class="detail-label">LODGING OPTIONS:</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/gatcabin1/400/300" alt="Cabin" class="option-image">
+                <div class="option-details">
+                    <h4>Mountain Cabin w/ Views</h4>
+                    <p>~$150-190/night | Hot tub, fireplace, mountain views<br>
+                    <strong>3 nights = $450-570</strong></p>
+                </div>
+            </div>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/gathotel1/400/300" alt="Hotel" class="option-image">
+                <div class="option-details">
+                    <h4>Downtown Gatlinburg Hotel</h4>
+                    <p>~$130-170/night | Walk to attractions, pool, parking<br>
+                    <strong>3 nights = $390-510</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="itinerary-section">
+            <p class="detail-label">3-DAY SAMPLE ITINERARY:</p>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/smokies1/400/300" alt="Smokies" class="option-image">
+                <div class="option-details">
+                    <h4>Day 1: Smoky Mountains</h4>
+                    <p>Cades Cove scenic drive, hiking trails, fall foliage, dinner ($50-60)</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/gattown1/400/300" alt="Gatlinburg" class="option-image">
+                <div class="option-details">
+                    <h4>Day 2: Gatlinburg Attractions</h4>
+                    <p>SkyBridge ($70 for 2), Ober Gatlinburg ($60 for 2), downtown exploring</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/pigeon1/400/300" alt="Pigeon Forge" class="option-image">
+                <div class="option-details">
+                    <h4>Day 3: Pigeon Forge</h4>
+                    <p>The Island attractions, shopping, show or relaxation, departure</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>BUDGET BREAKDOWN</h3>
+            <p><strong>Lodging:</strong> $390-570 (cabin or hotel 3 nights)<br>
+            <strong>Food:</strong> $150-200<br>
+            <strong>Activities:</strong> $130-200 (SkyBridge, Ober, optional show)<br>
+            <strong>Gas:</strong> ~$50 round trip<br>
+            <span style="color: #ffbf00; font-size: 1.1em;"><strong>TOTAL: $720-1020</strong></span><br>
+            <span style="color: #888; font-size: 0.9em;">*Add $170 for Dollywood if desired</span></p>
+        </div>
+
+        <button class="btn" onclick="goToScreen(999)">SELECT THIS DESTINATION</button>
+    </div>
+</div>
+
+<!-- Screen 302: Fall - Helen -->
+<div id="screen302" class="screen">
+    <button class="back-btn" onclick="goToScreen(300)">← OPERATIONS</button>
+    <div class="destination-page">
+        <div class="classified-header">
+            <h2>🍂 OPERATION: ALPINE FEST</h2>
+            <p class="subtitle">/// HELEN, GEORGIA ///</p>
+        </div>
+        
+        <img src="https://picsum.photos/seed/helen1/1000/300" alt="Helen" class="destination-hero">
+        
+        <div class="info-section">
+            <h3>MISSION OVERVIEW</h3>
+            <p><span class="detail-label">LOCATION:</span> North Georgia Mountains (2.5 hours from Birmingham)</p>
+            <p><span class="detail-label">OPTIMAL SEASON:</span> Fall (Sep-Nov) for Oktoberfest & fall colors</p>
+            <p style="margin-top: 15px;">Bavarian-style alpine village nestled in the mountains. Famous for Oktoberfest celebrations, German food, and stunning fall foliage. Unique and charming destination.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>ACTIVITIES & INTEL</h3>
+            <p>🍺 Oktoberfest celebration (Sep-Nov)<br>
+            🚣 Chattahoochee River tubing<br>
+            🥾 Anna Ruby Falls hike ($3 parking)<br>
+            🍷 Local winery tours<br>
+            🏔️ Brasstown Bald (highest GA point)<br>
+            🛍️ Bavarian village shopping</p>
+        </div>
+
+        <div class="lodging-section">
+            <p class="detail-label">LODGING OPTIONS:</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/helencabin1/400/300" alt="Cabin" class="option-image">
+                <div class="option-details">
+                    <h4>Riverside Cabin</h4>
+                    <p>~$140-180/night | River views, hot tub, fire pit<br>
+                    <strong>3 nights = $420-540</strong></p>
+                </div>
+            </div>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/heleninn1/400/300" alt="Inn" class="option-image">
+                <div class="option-details">
+                    <h4>Bavarian Inn Downtown</h4>
+                    <p>~$110-150/night | Walk to everything, Alpine style<br>
+                    <strong>3 nights = $330-450</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="itinerary-section">
+            <p class="detail-label">3-DAY SAMPLE ITINERARY:</p>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/helenfest1/400/300" alt="Oktoberfest" class="option-image">
+                <div class="option-details">
+                    <h4>Day 1: Oktoberfest & Village</h4>
+                    <p>Arrive, Oktoberfest celebration, German dinner & beer, village stroll</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/helenhike1/400/300" alt="Hiking" class="option-image">
+                <div class="option-details">
+                    <h4>Day 2: Nature Adventure</h4>
+                    <p>Anna Ruby Falls hike, Brasstown Bald drive, wine tasting ($50 for 2)</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/helenriver1/400/300" alt="River" class="option-image">
+                <div class="option-details">
+                    <h4>Day 3: Relaxation</h4>
+                    <p>River walk, shopping, brunch ($40), scenic drive home</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>BUDGET BREAKDOWN</h3>
+            <p><strong>Lodging:</strong> $330-540 (inn or cabin 3 nights)<br>
+            <strong>Food:</strong> $150-200 (German food & beer!)<br>
+            <strong>Activities:</strong> $50-80 (wine tasting, parking)<br>
+            <strong>Gas:</strong> ~$40 round trip<br>
+            <span style="color: #ffbf00; font-size: 1.1em;"><strong>TOTAL: $570-860</strong></span></p>
+        </div>
+
+        <button class="btn" onclick="goToScreen(999)">SELECT THIS DESTINATION</button>
+    </div>
+</div>
+
+<!-- Screen 400: Winter Operations Menu -->
+<div id="screen400" class="screen">
+    <button class="back-btn" onclick="goToScreen(3)">← SEASONS</button>
+    <div class="classified-header">
+        <h2>❄️ WINTER OPERATIONS</h2>
+        <p class="subtitle">/// SELECT YOUR OPERATION ///</p>
+    </div>
+    <div class="season-grid">
+        <div class="season-card" onclick="goToScreen(401)">
+            <h3>OPERATION: MOUNTAIN RETREAT</h3>
+            <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">MENTONE, AL</p>
+            <p style="font-size: 0.85em; margin-top: 10px;">Cozy Cabins • Waterfalls • Budget</p>
+        </div>
+        <div class="season-card" onclick="goToScreen(402)">
+            <h3>OPERATION: MUSIC CITY</h3>
+            <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">FRANKLIN / NASHVILLE, TN</p>
+            <p style="font-size: 0.85em; margin-top: 10px;">Live Music • Food Scene • History</p>
+        </div>
+    </div>
+</div>
+
+<!-- Screen 401: Winter - Mentone -->
+<div id="screen401" class="screen">
+    <button class="back-btn" onclick="goToScreen(400)">← OPERATIONS</button>
+    <div class="destination-page">
+        <div class="classified-header">
+            <h2>❄️ OPERATION: MOUNTAIN RETREAT</h2>
+            <p class="subtitle">/// MENTONE, ALABAMA ///</p>
+        </div>
+        
+        <img src="https://picsum.photos/seed/mentone1/1000/300" alt="Mentone" class="destination-hero">
+        
+        <div class="info-section">
+            <h3>MISSION OVERVIEW</h3>
+            <p><span class="detail-label">LOCATION:</span> Lookout Mountain plateau, Alabama (1.5 hours from Birmingham)</p>
+            <p><span class="detail-label">OPTIMAL SEASON:</span> Winter (Dec-Feb) for cozy cabin vibes & solitude</p>
+            <p style="margin-top: 15px;">Quiet mountain retreat with stunning views, waterfalls, and local charm. Alabama's hidden gem for peaceful, cozy getaways. Perfect for unplugging and relaxing.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>ACTIVITIES & INTEL</h3>
+            <p>💧 DeSoto Falls (FREE)<br>
+            🏞️ Little River Canyon (FREE)<br>
+            🛍️ Downtown Mentone shops<br>
+            🥾 Hiking trails & overlooks<br>
+            🚗 Scenic mountain drives<br>
+            🔥 Cozy cabin with fireplace</p>
+        </div>
+
+        <div class="lodging-section">
+            <p class="detail-label">LODGING OPTIONS:</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/mentcabin1/400/300" alt="Cabin" class="option-image">
+                <div class="option-details">
+                    <h4>Cozy Mountain Cabin</h4>
+                    <p>~$120-150/night | Fireplace, mountain views, porch<br>
+                    <strong>3 nights = $360-450</strong></p>
+                </div>
+            </div>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/mentinn1/400/300" alt="Inn" class="option-image">
+                <div class="option-details">
+                    <h4>Historic Mountain Inn</h4>
+                    <p>~$100-130/night | Charming, breakfast included<br>
+                    <strong>3 nights = $300-390</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="itinerary-section">
+            <p class="detail-label">3-DAY SAMPLE ITINERARY:</p>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/mentfall1/400/300" alt="DeSoto" class="option-image">
+                <div class="option-details">
+                    <h4>Day 1: Waterfalls</h4>
+                    <p>Arrival, DeSoto Falls hike, downtown exploring, cabin dinner</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/mentcanyon1/400/300" alt="Canyon" class="option-image">
+                <div class="option-details">
+                    <h4>Day 2: Canyon Views</h4>
+                    <p>Little River Canyon scenic drive, overlooks, local restaurant ($40-50)</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/mentcozy1/400/300" alt="Relaxation" class="option-image">
+                <div class="option-details">
+                    <h4>Day 3: Cozy Cabin Day</h4>
+                    <p>Morning hike, cabin relaxation by fire, brunch, departure</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>BUDGET BREAKDOWN</h3>
+            <p><strong>Lodging:</strong> $300-450 (cabin or inn 3 nights)<br>
+            <strong>Food:</strong> $120-160 (can cook in cabin)<br>
+            <strong>Activities:</strong> FREE (all nature!)<br>
+            <strong>Gas:</strong> ~$25 round trip<br>
+            <span style="color: #ffbf00; font-size: 1.1em;"><strong>TOTAL: $445-635</strong></span><br>
+            <span style="color: #00ff41; font-size: 1em;">⭐ MOST AFFORDABLE OPTION!</span></p>
+        </div>
+
+        <button class="btn" onclick="goToScreen(999)">SELECT THIS DESTINATION</button>
+    </div>
+</div>
+
+<!-- Screen 402: Winter - Franklin/Nashville -->
+<div id="screen402" class="screen">
+    <button class="back-btn" onclick="goToScreen(400)">← OPERATIONS</button>
+    <div class="destination-page">
+        <div class="classified-header">
+            <h2>❄️ OPERATION: MUSIC CITY</h2>
+            <p class="subtitle">/// FRANKLIN / NASHVILLE, TN ///</p>
+        </div>
+        
+        <img src="https://picsum.photos/seed/nashville1/1000/300" alt="Nashville" class="destination-hero">
+        
+        <div class="info-section">
+            <h3>MISSION OVERVIEW</h3>
+            <p><span class="detail-label">LOCATION:</span> Middle Tennessee (3 hours from Birmingham)</p>
+            <p><span class="detail-label">OPTIMAL SEASON:</span> Winter (Dec-Feb) for holiday lights, indoor attractions & live music</p>
+            <p style="margin-top: 15px;">Charming historic Franklin + vibrant Nashville. Mix of Southern history, incredible food scene, live music, and holiday charm. Perfect winter city escape.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>ACTIVITIES & INTEL</h3>
+            <p>🎸 Live music on Broadway (FREE-$20)<br>
+            🏛️ Historic Franklin downtown (FREE)<br>
+            🎵 Country Music Hall of Fame ($30/person)<br>
+            🍗 Hot chicken & BBQ dining<br>
+            🛍️ Franklin shopping district<br>
+            🎄 Holiday lights & decorations</p>
+        </div>
+
+        <div class="lodging-section">
+            <p class="detail-label">LODGING OPTIONS:</p>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/frankhotel1/400/300" alt="Franklin Hotel" class="option-image">
+                <div class="option-details">
+                    <h4>Franklin Historic Hotel</h4>
+                    <p>~$130-170/night | Downtown location, walkable, charming<br>
+                    <strong>3 nights = $390-510</strong></p>
+                </div>
+            </div>
+            <div class="lodging-option">
+                <img src="https://picsum.photos/seed/nashhotel1/400/300" alt="Nashville Hotel" class="option-image">
+                <div class="option-details">
+                    <h4>Nashville Downtown Hotel</h4>
+                    <p>~$140-180/night | Near Broadway, music venues<br>
+                    <strong>3 nights = $420-540</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="itinerary-section">
+            <p class="detail-label">3-DAY SAMPLE ITINERARY:</p>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/franktown1/400/300" alt="Franklin" class="option-image">
+                <div class="option-details">
+                    <h4>Day 1: Franklin Exploration</h4>
+                    <p>Arrival, historic downtown, boutique shopping, dinner at local spot ($60-70)</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/nashmusic1/400/300" alt="Music" class="option-image">
+                <div class="option-details">
+                    <h4>Day 2: Nashville Music</h4>
+                    <p>Country Music Hall of Fame ($60 for 2), Broadway honky-tonks, live music</p>
+                </div>
+            </div>
+            <div class="itinerary-option">
+                <img src="https://picsum.photos/seed/nashfood1/400/300" alt="Food" class="option-image">
+                <div class="option-details">
+                    <h4>Day 3: Food Tour</h4>
+                    <p>Hot chicken brunch ($40), BBQ lunch, explore neighborhoods, departure</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>BUDGET BREAKDOWN</h3>
+            <p><strong>Lodging:</strong> $390-540 (Franklin or Nashville 3 nights)<br>
+            <strong>Food:</strong> $180-230 (great dining scene)<br>
+            <strong>Activities:</strong> $60-100 (museum, shows, parking)<br>
+            <strong>Gas:</strong> ~$45 round trip<br>
+            <span style="color: #ffbf00; font-size: 1.1em;"><strong>TOTAL: $675-915</strong></span></p>
+        </div>
+
+        <button class="btn" onclick="goToScreen(999)">SELECT THIS DESTINATION</button>
+    </div>
+</div>
+
+<!-- Screen 999: Final Decision -->
+<div id="screen999" class="screen">
+    <button class="back-btn" onclick="goToScreen(3)">← SEASONS</button>
+    <div class="classified-header">
+        <h2>MISSION DECISION</h2>
+        <p class="subtitle">/// AWAITING CONFIRMATION ///</p>
+    </div>
+    <div class="content-box">
+        <p class="mission-text" style="text-align: center; font-size: 1.2em;">
+            You have reviewed all available intelligence, Agent.
+        </p>
+        <p class="mission-text" style="text-align: center;">
+            The final decision is yours. Choose the destination that calls to you, and we will execute this mission together.
+        </p>
+        <p style="text-align: center; color: #888; margin-top: 20px;">
+            Remember: There are no wrong choices, only adventures waiting to happen.
+        </p>
+    </div>
+    <button class="btn" onclick="acceptMission()">ACCEPT MISSION</button>
+    <div id="finalMessage" class="final-message">
+        <h2>MISSION ACCEPTED!</h2>
+        <p style="font-size: 1.1em; margin-top: 15px;">
+            Excellent work, Agent. Your decision has been logged and the operation is now in motion.
+        </p>
+        <p style="color: #ffbf00; margin-top: 20px; font-size: 1.2em;">
+            Let's make some unforgettable memories together! ❤️
+        </p>
+        <p style="color: #888; margin-top: 20px; font-size: 0.9em;">
+            /// THIS MESSAGE WILL SELF-DESTRUCT... NEVER ///
+        </p>
+    </div>
+</div>
+
+<script>
+    // Matrix Rain Effect
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
     }
 
-    function acceptMission() {
-        const message = document.getElementById('finalMessage');
-        message.classList.add('show');
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#00ff41';
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
     }
 
-    // Start matrix on load
-    window.addEventListener('load', () => {
-        matrixInterval = setInterval(drawMatrix, 33);
-        setTimeout(() => {
-            canvas.classList.add('active');
-        }, 500);
-    });
+    let matrixInterval;
 
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-</script>
+    function goToScreen(screenNumber) {
+        const screens = document.querySelectorAll('.screen');
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+            screen.style.display = 'none';
+        });
+        
+        const screenId = 'screen' + screenNumber;
+        const targetScreen = document.getElementById(screenId);
+        
+        if (targetScreen) {
+            targetScreen.classList.add('active');
