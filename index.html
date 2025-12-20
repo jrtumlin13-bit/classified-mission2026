@@ -288,14 +288,78 @@
 </head>
 <body>
 
-    <!-- LANDING SCREEN -->
-    <div id="landing" class="screen active">
+    <script>
+        // Navigation system
+        let currentSeason = '';
+
+        function showScreen(screenId) {
+            // Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.classList.remove('active'));
+            
+            // Show selected screen
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function showLanding() {
+            showScreen('landing');
+        }
+
+        function showIntro() {
+            showScreen('intro');
+        }
+
+        function showSeasonSelect() {
+            showScreen('season-select');
+        }
+
+        function showSeasonScreen(season) {
+            currentSeason = season;
+            showScreen(season);
+        }
+
+        function showMission(season, location) {
+            const missionId = 'mission-' + season + '-' + location;
+            showScreen(missionId);
+        }
+
+        function toggleContent(contentId) {
+            const content = document.getElementById(contentId);
+            if (content) {
+                content.classList.toggle('revealed');
+            }
+        }
+    </script>
+
+    <!-- INTRO SCREEN -->
+    <div id="intro" class="screen active">
         <div class="container">
             <div class="header">
-                <div class="classified-stamp">★ CLASSIFIED ★</div>
-                <h1>Mission Briefing</h1>
-                <p>Authorized Personnel Only</p>
-                <p style="margin-top: 20px; color: #c41e3a;">Select your deployment season</p>
+                <div class="classified-stamp">★ TOP SECRET ★</div>
+                <h1>Classified Mission</h1>
+                <p>Authorization Required</p>
+            </div>
+
+            <div class="mission-file" style="text-align: center; padding: 60px 40px;">
+                <h2>Operation: Getaway</h2>
+                <p style="margin: 30px 0; font-size: 1.1em;">This briefing contains classified vacation intelligence.</p>
+                <p style="margin: 30px 0;">You have been selected for a series of covert operations designed for rest, romance, and reconnaissance of Alabama's finest destinations.</p>
+                <button class="decrypt-btn" onclick="showSeasonSelect()" style="margin-top: 40px;">▶ AUTHORIZATION GRANTED - BEGIN BRIEFING</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEASON SELECT SCREEN -->
+    <div id="season-select" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION BRIEFING ★</div>
+                <h1>Select Deployment Season</h1>
+                <p>Choose your tactical window</p>
             </div>
 
             <div class="season-grid">
@@ -330,7 +394,7 @@
                 </div>
             </div>
 
-            <button class="back-btn" onclick="showLanding()">← Back to Seasons</button>
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
 
             <div class="destination-list">
                 <div class="destination-item" onclick="showMission('spring', 'chattanooga')">
@@ -356,7 +420,7 @@
                 </div>
             </div>
 
-            <button class="back-btn" onclick="showLanding()">← Back to Seasons</button>
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
 
             <div class="destination-list">
                 <div class="destination-item" onclick="showMission('summer', 'gulfshores')">
@@ -382,7 +446,7 @@
                 </div>
             </div>
 
-            <button class="back-btn" onclick="showLanding()">← Back to Seasons</button>
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
 
             <div class="destination-list">
                 <div class="destination-item" onclick="showMission('fall', 'gatlinburg')">
@@ -408,7 +472,7 @@
                 </div>
             </div>
 
-            <button class="back-btn" onclick="showLanding()">← Back to Seasons</button>
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
 
             <div class="destination-list">
                 <div class="destination-item" onclick="showMission('winter', 'mentone')">
