@@ -56,6 +56,241 @@
             margin-bottom: 10px;
         }
 
+        /* Season-specific colors */
+        .spring-theme .classified-stamp,
+        .spring-theme .season-card:hover,
+        .spring-theme .destination-item,
+        .spring-theme .decrypt-btn,
+        .spring-theme .back-btn {
+            border-color: #ff69b4 !important;
+        }
+
+        .spring-theme .classified-stamp,
+        .spring-theme h1,
+        .spring-theme h2,
+        .spring-theme .subtitle,
+        .spring-theme .season-card h2 {
+            color: #ff69b4 !important;
+        }
+
+        .spring-theme .decrypt-btn {
+            background: #ff69b4 !important;
+        }
+
+        .spring-theme .decrypt-btn:hover {
+            background: #ff1493 !important;
+        }
+
+        .spring-theme .back-btn:hover {
+            background: #ff69b4 !important;
+        }
+
+        .spring-theme .progress-fill {
+            background: #ff69b4 !important;
+        }
+
+        .summer-theme .classified-stamp,
+        .summer-theme .season-card:hover,
+        .summer-theme .destination-item,
+        .summer-theme .decrypt-btn,
+        .summer-theme .back-btn {
+            border-color: #ffd700 !important;
+        }
+
+        .summer-theme .classified-stamp,
+        .summer-theme h1,
+        .summer-theme h2,
+        .summer-theme .subtitle,
+        .summer-theme .season-card h2 {
+            color: #ffd700 !important;
+        }
+
+        .summer-theme .decrypt-btn {
+            background: #ffd700 !important;
+            color: #0a0a0a !important;
+        }
+
+        .summer-theme .decrypt-btn:hover {
+            background: #ffed4e !important;
+        }
+
+        .summer-theme .back-btn {
+            color: #ffd700 !important;
+        }
+
+        .summer-theme .back-btn:hover {
+            background: #ffd700 !important;
+            color: #0a0a0a !important;
+        }
+
+        .summer-theme .progress-fill {
+            background: #ffd700 !important;
+        }
+
+        .fall-theme .classified-stamp,
+        .fall-theme .season-card:hover,
+        .fall-theme .destination-item,
+        .fall-theme .decrypt-btn,
+        .fall-theme .back-btn {
+            border-color: #d2691e !important;
+        }
+
+        .fall-theme .classified-stamp,
+        .fall-theme h1,
+        .fall-theme h2,
+        .fall-theme .subtitle,
+        .fall-theme .season-card h2 {
+            color: #d2691e !important;
+        }
+
+        .fall-theme .decrypt-btn {
+            background: #d2691e !important;
+        }
+
+        .fall-theme .decrypt-btn:hover {
+            background: #a0522d !important;
+        }
+
+        .fall-theme .back-btn:hover {
+            background: #d2691e !important;
+        }
+
+        .fall-theme .progress-fill {
+            background: #d2691e !important;
+        }
+
+        .winter-theme .classified-stamp,
+        .winter-theme .season-card:hover,
+        .winter-theme .destination-item,
+        .winter-theme .decrypt-btn,
+        .winter-theme .back-btn {
+            border-color: #87ceeb !important;
+        }
+
+        .winter-theme .classified-stamp,
+        .winter-theme h1,
+        .winter-theme h2,
+        .winter-theme .subtitle,
+        .winter-theme .season-card h2 {
+            color: #87ceeb !important;
+        }
+
+        .winter-theme .decrypt-btn {
+            background: #87ceeb !important;
+            color: #0a0a0a !important;
+        }
+
+        .winter-theme .decrypt-btn:hover {
+            background: #add8e6 !important;
+        }
+
+        .winter-theme .back-btn {
+            color: #87ceeb !important;
+        }
+
+        .winter-theme .back-btn:hover {
+            background: #87ceeb !important;
+            color: #0a0a0a !important;
+        }
+
+        .winter-theme .progress-fill {
+            background: #87ceeb !important;
+        }
+
+        /* Animated backgrounds */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        @keyframes fallLeft {
+            to {
+                transform: translateY(100vh) translateX(-50px) rotate(-360deg);
+            }
+        }
+
+        @keyframes snow {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes rays {
+            0% {
+                opacity: 0.3;
+                transform: translateY(-100%);
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0.3;
+                transform: translateY(100%);
+            }
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: relative;
+            z-index: 2;
+        }
+
+        .petal, .leaf, .snowflake, .ray {
+            position: absolute;
+            top: -20px;
+            opacity: 0.6;
+        }
+
+        .petal {
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ffb6c1, #ff69b4);
+            border-radius: 50% 0 50% 0;
+            animation: fall linear infinite;
+        }
+
+        .leaf {
+            width: 15px;
+            height: 15px;
+            background: #d2691e;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: fallLeft linear infinite;
+        }
+
+        .snowflake {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: snow linear infinite;
+            box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .ray {
+            width: 100px;
+            height: 200%;
+            background: linear-gradient(to bottom, 
+                rgba(255, 215, 0, 0) 0%,
+                rgba(255, 215, 0, 0.3) 30%,
+                rgba(255, 215, 0, 0.2) 50%,
+                rgba(255, 215, 0, 0.3) 70%,
+                rgba(255, 215, 0, 0) 100%
+            );
+            animation: rays 8s ease-in-out infinite;
+            top: -100%;
+        }
+
         .header h1 {
             font-size: 2.5em;
             color: #fff;
@@ -105,12 +340,62 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
 
         .season-card:hover {
             border-color: #c41e3a;
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
+        }
+
+        /* Color season cards on select page */
+        #season-select .season-card:nth-child(1) {
+            border-color: #ff69b4;
+        }
+
+        #season-select .season-card:nth-child(1):hover {
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+        }
+
+        #season-select .season-card:nth-child(1) h2 {
+            color: #ff69b4;
+        }
+
+        #season-select .season-card:nth-child(2) {
+            border-color: #ffd700;
+        }
+
+        #season-select .season-card:nth-child(2):hover {
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        #season-select .season-card:nth-child(2) h2 {
+            color: #ffd700;
+        }
+
+        #season-select .season-card:nth-child(3) {
+            border-color: #d2691e;
+        }
+
+        #season-select .season-card:nth-child(3):hover {
+            box-shadow: 0 10px 30px rgba(210, 105, 30, 0.3);
+        }
+
+        #season-select .season-card:nth-child(3) h2 {
+            color: #d2691e;
+        }
+
+        #season-select .season-card:nth-child(4) {
+            border-color: #87ceeb;
+        }
+
+        #season-select .season-card:nth-child(4):hover {
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.3);
+        }
+
+        #season-select .season-card:nth-child(4) h2 {
+            color: #87ceeb;
         }
 
         .season-card h2 {
@@ -209,6 +494,22 @@
             content: "▸ ";
             color: #c41e3a;
             margin-right: 10px;
+        }
+
+        .spring-theme .mission-file li:before {
+            color: #ff69b4;
+        }
+
+        .summer-theme .mission-file li:before {
+            color: #ffd700;
+        }
+
+        .fall-theme .mission-file li:before {
+            color: #d2691e;
+        }
+
+        .winter-theme .mission-file li:before {
+            color: #87ceeb;
         }
 
         .mission-image {
@@ -350,12 +651,80 @@
 
         function showSeasonScreen(season) {
             currentSeason = season;
+            const screenElement = document.getElementById(season);
+            if (screenElement) {
+                // Add season-specific theme class
+                screenElement.className = 'screen active ' + season + '-theme';
+            }
             showScreen(season);
         }
 
         function showMission(season, location) {
             const missionId = 'mission-' + season + '-' + location;
+            const missionElement = document.getElementById(missionId);
+            if (missionElement) {
+                // Add season-specific theme class to mission screens
+                missionElement.className = 'screen active ' + season + '-theme';
+                
+                // Add animated background
+                addSeasonalBackground(missionElement, season);
+            }
             showScreen(missionId);
+        }
+
+        function addSeasonalBackground(element, season) {
+            // Remove any existing background animation
+            const existing = element.querySelector('.background-animation');
+            if (existing) {
+                existing.remove();
+            }
+
+            // Create background container
+            const bgContainer = document.createElement('div');
+            bgContainer.className = 'background-animation';
+
+            if (season === 'spring') {
+                // Cherry blossom petals
+                for (let i = 0; i < 20; i++) {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    petal.style.left = Math.random() * 100 + '%';
+                    petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    petal.style.animationDelay = Math.random() * 5 + 's';
+                    bgContainer.appendChild(petal);
+                }
+            } else if (season === 'summer') {
+                // Sun rays
+                for (let i = 0; i < 8; i++) {
+                    const ray = document.createElement('div');
+                    ray.className = 'ray';
+                    ray.style.left = (i * 12.5) + '%';
+                    ray.style.animationDelay = (i * 0.5) + 's';
+                    bgContainer.appendChild(ray);
+                }
+            } else if (season === 'fall') {
+                // Falling leaves
+                for (let i = 0; i < 20; i++) {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'leaf';
+                    leaf.style.left = Math.random() * 100 + '%';
+                    leaf.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                    leaf.style.animationDelay = Math.random() * 5 + 's';
+                    bgContainer.appendChild(leaf);
+                }
+            } else if (season === 'winter') {
+                // Snowflakes
+                for (let i = 0; i < 30; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.className = 'snowflake';
+                    snowflake.style.left = Math.random() * 100 + '%';
+                    snowflake.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    snowflake.style.animationDelay = Math.random() * 5 + 's';
+                    bgContainer.appendChild(snowflake);
+                }
+            }
+
+            element.insertBefore(bgContainer, element.firstChild);
         }
 
         function toggleContent(contentId) {
