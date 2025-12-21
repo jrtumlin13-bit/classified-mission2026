@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLASSIFIED MISSION</title>
+    <title>CLASSIFIED - Mission Briefing</title>
     <style>
         * {
             margin: 0;
@@ -13,39 +13,20 @@
 
         body {
             font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: #00ff41;
-            min-height: 100vh;
+            background: #0a0a0a;
+            color: #e0e0e0;
             overflow-x: hidden;
-        }
-
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        #matrixCanvas.active {
-            opacity: 0.15;
         }
 
         .screen {
             display: none;
             min-height: 100vh;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
-            animation: fadeIn 0.8s ease-in;
+            animation: fadeIn 0.5s ease-in;
         }
 
         .screen.active {
-            display: flex;
+            display: block;
         }
 
         @keyframes fadeIn {
@@ -53,341 +34,990 @@
             to { opacity: 1; }
         }
 
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 255, 65, 0.2);
-            color: #00ff41;
-            border: 2px solid #00ff41;
-            padding: 10px 20px;
-            font-size: 0.9em;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .back-btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-            transform: scale(1.05);
-        }
-
-        .classified-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border: 3px solid #00ff41;
-            padding: 20px;
-            background: rgba(0, 255, 65, 0.05);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-        }
-
-        h1 {
-            font-size: 2.5em;
-            letter-spacing: 8px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #00ff41;
-        }
-
-        h2 {
-            font-size: 1.8em;
-            color: #ffbf00;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
-        }
-
-        .subtitle {
-            font-size: 0.9em;
-            color: #888;
-            letter-spacing: 3px;
-        }
-
-        .btn {
-            background: #00ff41;
-            color: #0a0a0a;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            cursor: pointer;
-            letter-spacing: 2px;
-            margin-top: 30px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-        }
-
-        .btn:hover {
-            background: #ffbf00;
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 191, 0, 0.7);
-        }
-
-        .content-box {
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #00ff41;
-            padding: 30px;
-            margin: 20px;
-            line-height: 1.8;
-        }
-
-        .mission-text {
-            font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-
-        .season-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .container {
             max-width: 900px;
-            width: 100%;
-            padding: 20px;
+            margin: 0 auto;
         }
 
-        .season-card {
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #00ff41;
-            padding: 30px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Header Styling */
+        .header {
             text-align: center;
+            padding: 40px 20px;
+            border-bottom: 2px solid #c41e3a;
+            margin-bottom: 40px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
         }
 
-        .season-card:hover {
-            border-color: #ffbf00;
-            box-shadow: 0 0 25px rgba(255, 191, 0, 0.6);
-            transform: translateY(-8px);
-        }
-
-        .season-card h3 {
-            color: #ffbf00;
-            font-size: 1.8em;
+        .classified-stamp {
+            color: #c41e3a;
+            font-size: 14px;
+            letter-spacing: 8px;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
-        .destination-page {
-            max-width: 1000px;
-            width: 100%;
-            padding: 20px;
-            padding-top: 80px;
+        .header h1 {
+            font-size: 2.5em;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 10px 0;
         }
 
-        .destination-hero {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border: 3px solid #00ff41;
-            margin-bottom: 20px;
-        }
-
-        .info-section {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff41;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        .info-section h3 {
-            color: #ffbf00;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #00ff41;
-            padding-bottom: 10px;
-        }
-
-        .detail-label {
-            color: #ffbf00;
-            font-weight: bold;
+        .header p {
+            color: #888;
+            font-size: 0.9em;
             margin-top: 10px;
         }
 
-        .lodging-section, .itinerary-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 255, 65, 0.05);
-            border-left: 3px solid #ffbf00;
+        /* Progress Bar */
+        .progress-bar {
+            background: #1a1a1a;
+            height: 4px;
+            margin: 20px 0;
+            border-radius: 2px;
+            overflow: hidden;
         }
 
-        .lodging-option, .itinerary-option {
-            display: flex;
-            gap: 15px;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            align-items: center;
+        .progress-fill {
+            background: #c41e3a;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
-        .option-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 1px solid #00ff41;
-            flex-shrink: 0;
+        /* Season Grid */
+        .season-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .option-details h4 {
-            color: #ffbf00;
-            margin-bottom: 5px;
-            font-size: 1em;
-        }
-
-        .option-details p {
-            font-size: 0.85em;
-            color: #aaa;
-        }
-
-        .final-message {
-            display: none;
-            text-align: center;
-            max-width: 600px;
+        .season-card {
+            background: #1a1a1a;
+            border: 2px solid #333;
             padding: 30px;
-            background: rgba(0, 255, 65, 0.1);
-            border: 3px solid #ffbf00;
-            margin-top: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .final-message.show {
+        .season-card:hover {
+            border-color: #c41e3a;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(196, 30, 58, 0.3);
+        }
+
+        .season-card h2 {
+            color: #c41e3a;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .season-card p {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        /* Destination List */
+        .destination-list {
+            display: grid;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .destination-item {
+            background: #1a1a1a;
+            border-left: 4px solid #c41e3a;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .destination-item:hover {
+            background: #222;
+            transform: translateX(10px);
+        }
+
+        .destination-item h3 {
+            color: #fff;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .destination-item .code-name {
+            color: #888;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+
+        .destination-item .subtitle {
+            color: #c41e3a;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Mission File */
+        .mission-file {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            padding: 40px;
+            margin: 20px 0;
+        }
+
+        .mission-file h2 {
+            color: #c41e3a;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .mission-file h3 {
+            color: #fff;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+            text-transform: uppercase;
+        }
+
+        .mission-file p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .mission-file ul {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .mission-file li {
+            padding: 8px 0;
+            color: #ccc;
+            border-bottom: 1px solid #222;
+        }
+
+        .mission-file li:before {
+            content: "▸ ";
+            color: #c41e3a;
+            margin-right: 10px;
+        }
+
+        .mission-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            margin: 20px 0;
+            border: 2px solid #333;
+        }
+
+        /* Decrypt Button */
+        .decrypt-btn {
+            background: #c41e3a;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .decrypt-btn:hover {
+            background: #a01828;
+            transform: scale(1.05);
+        }
+
+        .hidden-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .hidden-content.revealed {
             display: block;
-            animation: fadeIn 1s ease;
         }
 
+        /* Back Button */
+        .back-btn {
+            background: transparent;
+            color: #c41e3a;
+            border: 2px solid #c41e3a;
+            padding: 12px 30px;
+            font-size: 0.9em;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 20px 10px 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #c41e3a;
+            color: #fff;
+        }
+
+        /* Budget Tag */
+        .budget-tag {
+            display: inline-block;
+            background: #2a4a2a;
+            color: #7cfc00;
+            padding: 8px 20px;
+            font-size: 1em;
+            margin: 20px 0;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .agent-allocation {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #1a1a1a;
+            border: 2px solid #2a4a2a;
+        }
+
+        .agent-allocation h3 {
+            color: #7cfc00;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .agent-allocation p {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 1.8em; letter-spacing: 4px; }
-            h2 { font-size: 1.4em; letter-spacing: 2px; }
-            .back-btn { top: 10px; left: 10px; padding: 8px 15px; font-size: 0.8em; }
-            .destination-hero { height: 200px; }
-            .lodging-option, .itinerary-option { flex-direction: column; }
-            .option-image { width: 100%; height: 150px; }
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .season-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mission-file {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="matrixCanvas"></canvas>
 
-    <!-- Screen 1: Landing -->
-    <div id="screen1" class="screen active">
-        <div class="classified-header">
-            <h1>CLASSIFIED MISSION</h1>
-            <p class="subtitle">/// TOP SECRET ///</p>
-        </div>
-        <button class="btn" onclick="goToScreen(2)">BEGIN MISSION BRIEFING</button>
-    </div>
+    <script>
+        // Navigation system
+        let currentSeason = '';
 
-    <!-- Screen 2: Agent Verification -->
-    <div id="screen2" class="screen">
-        <button class="back-btn" onclick="goToScreen(1)">← BACK</button>
-        <div class="classified-header">
-            <h2>AGENT VERIFICATION</h2>
-            <p class="subtitle">/// IDENTITY CONFIRMED ///</p>
-        </div>
-        <div class="content-box">
-            <p class="mission-text" style="text-align: center; font-size: 1.3em;">
-                ACCESS GRANTED, AGENT
-            </p>
-            <p style="text-align: center; color: #888;">
-                Your credentials have been verified. You are cleared for mission parameters.
-            </p>
-        </div>
-        <button class="btn" onclick="goToScreen(3)">PROCEED TO SEASON SELECTION</button>
-    </div>
-
-    <!-- Screen 3: Season Selection -->
-    <div id="screen3" class="screen">
-        <button class="back-btn" onclick="goToScreen(2)">← BACK</button>
-        <div class="classified-header">
-            <h2>SELECT MISSION SEASON</h2>
-            <p class="subtitle">/// CHOOSE YOUR DEPLOYMENT WINDOW ///</p>
-        </div>
-        <div class="content-box" style="margin-bottom: 30px;">
-            <p class="mission-text" style="text-align: center;">
-                Each season offers unique operational advantages. Select your preferred timeframe to view destinations optimized for that season.
-            </p>
-            <p style="text-align: center; color: #888; margin-top: 15px; font-size: 0.95em;">
-                <strong>Mission Parameters:</strong> 3-4 nights | $800 budget | From Birmingham, AL
-            </p>
-        </div>
-        <div class="season-grid">
-            <div class="season-card" onclick="goToScreen(100)">
-                <h3>🌸 SPRING</h3>
-                <p>2 Mountain Destinations</p>
-                <p style="font-size: 0.8em; margin-top: 10px;">Mar-May</p>
-            </div>
-            <div class="season-card" onclick="goToScreen(200)">
-                <h3>☀️ SUMMER</h3>
-                <p>2 Beach Destinations</p>
-                <p style="font-size: 0.8em; margin-top: 10px;">Jun-Aug</p>
-            </div>
-            <div class="season-card" onclick="goToScreen(300)">
-                <h3>🍂 FALL</h3>
-                <p>2 Mountain Destinations</p>
-                <p style="font-size: 0.8em; margin-top: 10px;">Sep-Nov</p>
-            </div>
-            <div class="season-card" onclick="goToScreen(400)">
-                <h3>❄️ WINTER</h3>
-                <p>2 Cozy Destinations</p>
-                <p style="font-size: 0.8em; margin-top: 10px;">Dec-Feb</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Screen 100: Spring Operations Menu -->
-    <div id="screen100" class="screen">
-        <button class="back-btn" onclick="goToScreen(3)">← SEASONS</button>
-        <div class="classified-header">
-            <h2>🌸 SPRING OPERATIONS</h2>
-            <p class="subtitle">/// SELECT YOUR OPERATION ///</p>
-        </div>
-        <div class="season-grid">
-            <div class="season-card" onclick="goToScreen(101)">
-                <h3>OPERATION: RIVER CITY</h3>
-                <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">CHATTANOOGA, TN</p>
-                <p style="font-size: 0.85em; margin-top: 10px;">Aquarium • Rock City • Breweries</p>
-            </div>
-            <div class="season-card" onclick="goToScreen(102)">
-                <h3>OPERATION: BLUE SUMMIT</h3>
-                <p style="font-size: 1.1em; color: #00ff41; margin-top: 15px;">BLUE RIDGE, GA</p>
-                <p style="font-size: 0.85em; margin-top: 10px;">Scenic Railway • Waterfalls • Wine</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Screen 101: Spring - Chattanooga -->
-    <div id="screen101" class="screen">
-        <button class="back-btn" onclick="goToScreen(100)">← OPERATIONS</button>
-        <div class="destination-page">
-            <div class="classified-header">
-                <h2>🌸 OPERATION: RIVER CITY</h2>
-                <p class="subtitle">/// CHATTANOOGA, TENNESSEE ///</p>
-            </div>
+        function showScreen(screenId) {
+            // Hide all screens
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => screen.classList.remove('active'));
             
-            <img src="https://picsum.photos/seed/chatt1/1000/300" alt="Chattanooga" class="destination-hero">
-            
-            <div class="info-section">
-                <h3>MISSION OVERVIEW</h3>
-                <p><span class="detail-label">LOCATION:</span> Southeastern Tennessee (2 hours from Birmingham)</p>
-                <p><span class="detail-label">OPTIMAL SEASON:</span> Spring (Mar-May) for blooming flowers, perfect temps & off-peak pricing</p>
-                <p style="margin-top: 15px;">Mountain town with riverfront charm, thriving food scene, and excellent breweries. Mix of outdoor adventure and urban exploration, gorgeous in spring.</p>
+            // Show selected screen
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function showLanding() {
+            showScreen('landing');
+        }
+
+        function showIntro() {
+            showScreen('intro');
+        }
+
+        function showSeasonSelect() {
+            showScreen('season-select');
+        }
+
+        function showSeasonScreen(season) {
+            currentSeason = season;
+            showScreen(season);
+        }
+
+        function showMission(season, location) {
+            const missionId = 'mission-' + season + '-' + location;
+            showScreen(missionId);
+        }
+
+        function toggleContent(contentId) {
+            const content = document.getElementById(contentId);
+            if (content) {
+                content.classList.toggle('revealed');
+            }
+        }
+    </script>
+
+    <!-- INTRO SCREEN -->
+    <div id="intro" class="screen active">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ TOP SECRET ★</div>
+                <h1>Classified Mission</h1>
+                <p>Authorization Required</p>
             </div>
 
-            <div class="info-section">
-                <h3>ACTIVITIES & INTEL</h3>
-                <p>🐠 Tennessee Aquarium ($35/person)<br>
-                🌸 Rock City Gardens spring blooms ($30/person)<br>
-                💎 Ruby Falls underground tour ($30/person)<br>
-                🌉 Walnut Street Bridge walk (FREE)<br>
-                🍺 Craft brewery tours ($10-15/person)<br>
-                🥾 Lookout Mountain hiking trails</p>
+            <div class="mission-file" style="text-align: center; padding: 60px 40px;">
+                <h2>Operation: Getaway</h2>
+                <p style="margin: 30px 0; font-size: 1.1em;">This briefing contains classified vacation intelligence.</p>
+                <p style="margin: 30px 0;">You have been selected for a series of covert operations designed for rest, romance, and reconnaissance of Alabama's finest destinations.</p>
+                
+                <div class="agent-allocation">
+                    <h3>Agent Allocation</h3>
+                    <p>Approved Budget: $800 per mission</p>
+                </div>
+                
+                <button class="decrypt-btn" onclick="showSeasonSelect()" style="margin-top: 40px;">▶ AUTHORIZATION GRANTED - BEGIN BRIEFING</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEASON SELECT SCREEN -->
+    <div id="season-select" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION BRIEFING ★</div>
+                <h1>Select Deployment Season</h1>
+                <p>Choose your tactical window</p>
             </div>
 
-            <div class="lodging-section">
-                <p class="detail-label">LODGING OPTIONS:</p>
-                <div class="lodging-option">
-                    <img src="https://picsum.photos/seed/chathotel1/400/300" alt="Hotel" class="option-image">
-                    <div class="option-details">
-                        <h4>Downtown Boutique Hotel</h4>
-                        <p>~$110-140/night | Walk to attractions, riverfront views<br>
-                        <strong
+            <button class="back-btn" onclick="showIntro()">← Back to Briefing</button>
+
+            <div class="season-grid">
+                <div class="season-card" onclick="showSeasonScreen('spring')">
+                    <h2>Spring</h2>
+                    <p>Operation: Bloom</p>
+                </div>
+                <div class="season-card" onclick="showSeasonScreen('summer')">
+                    <h2>Summer</h2>
+                    <p>Operation: Coastline</p>
+                </div>
+                <div class="season-card" onclick="showSeasonScreen('fall')">
+                    <h2>Fall</h2>
+                    <p>Operation: Foliage</p>
+                </div>
+                <div class="season-card" onclick="showSeasonScreen('winter')">
+                    <h2>Winter</h2>
+                    <p>Operation: Retreat</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SPRING SEASON SCREEN -->
+    <div id="spring" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ SPRING OPERATIONS ★</div>
+                <h1>Available Missions</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
+
+            <div class="destination-list">
+                <div class="destination-item" onclick="showMission('spring', 'chattanooga')">
+                    <div class="subtitle">Mission File #001</div>
+                    <h3>River City Reconnaissance</h3>
+                    <div class="code-name">Target: Chattanooga, Tennessee</div>
+                </div>
+                <div class="destination-item" onclick="showMission('spring', 'blueridge')">
+                    <div class="subtitle">Mission File #002</div>
+                    <h3>Mountain Pass Operation</h3>
+                    <div class="code-name">Target: Blue Ridge, Georgia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUMMER SEASON SCREEN -->
+    <div id="summer" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ SUMMER OPERATIONS ★</div>
+                <h1>Available Missions</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
+
+            <div class="destination-list">
+                <div class="destination-item" onclick="showMission('summer', 'gulfshores')">
+                    <div class="subtitle">Mission File #003</div>
+                    <h3>Coastal Infiltration</h3>
+                    <div class="code-name">Target: Gulf Shores, Alabama</div>
+                </div>
+                <div class="destination-item" onclick="showMission('summer', 'fairhope')">
+                    <div class="subtitle">Mission File #004</div>
+                    <h3>Bayside Deployment</h3>
+                    <div class="code-name">Target: Fairhope, Alabama</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FALL SEASON SCREEN -->
+    <div id="fall" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ FALL OPERATIONS ★</div>
+                <h1>Available Missions</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
+
+            <div class="destination-list">
+                <div class="destination-item" onclick="showMission('fall', 'gatlinburg')">
+                    <div class="subtitle">Mission File #005</div>
+                    <h3>Smoky Mountain Ascent</h3>
+                    <div class="code-name">Target: Gatlinburg / Pigeon Forge, Tennessee</div>
+                </div>
+                <div class="destination-item" onclick="showMission('fall', 'helen')">
+                    <div class="subtitle">Mission File #006</div>
+                    <h3>Alpine Village Survey</h3>
+                    <div class="code-name">Target: Helen, Georgia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WINTER SEASON SCREEN -->
+    <div id="winter" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ WINTER OPERATIONS ★</div>
+                <h1>Available Missions</h1>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonSelect()">← Back to Seasons</button>
+
+            <div class="destination-list">
+                <div class="destination-item" onclick="showMission('winter', 'mentone')">
+                    <div class="subtitle">Mission File #007</div>
+                    <h3>Highland Retreat</h3>
+                    <div class="code-name">Target: Mentone, Alabama</div>
+                </div>
+                <div class="destination-item" onclick="showMission('winter', 'franklin')">
+                    <div class="subtitle">Mission File #008</div>
+                    <h3>Music City Expedition</h3>
+                    <div class="code-name">Target: Franklin / Nashville, Tennessee</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MISSION DETAIL SCREENS -->
+    <!-- Gatlinburg Fall -->
+    <div id="mission-fall-gatlinburg" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #005 ★</div>
+                <h1>Gatlinburg / Pigeon Forge, TN</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('fall')">← Back to Fall Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=GATLINBURG+MOUNTAINS+IMAGE" alt="Gatlinburg" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Gatlinburg and Pigeon Forge offer the ultimate fall mountain escape with spectacular autumn foliage, world-class attractions, and endless entertainment. Located at the doorstep of Great Smoky Mountains National Park, this mission combines natural beauty with family-friendly fun, just 4 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Fall?</h3>
+                <p>Fall (September-November) brings the most spectacular foliage in the Eastern United States. Peak colors typically occur mid-October to early November. The weather is perfect for hiking, and the area comes alive with harvest festivals and seasonal events.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Late September or early November for fewer crowds and better rates. Mid-October is peak foliage but also peak pricing. Tuesday-Thursday stays offer best value.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('gatlinburg-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="gatlinburg-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive, check into cabin or hotel. Afternoon: Drive Cades Cove Loop in Great Smoky Mountains (wildlife viewing, historic buildings). Dinner at The Peddler Steakhouse. Evening stroll through downtown Gatlinburg.</li>
+                        <li><strong>Day 2:</strong> Breakfast at Crockett's Breakfast Camp. Morning hike to Laurel Falls (2.6 miles roundtrip, paved trail). Lunch at Greenbrier Restaurant. Afternoon: Ober Gatlinburg (aerial tramway, scenic chairlift rides). Dinner at The Melting Pot.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Pancake Pantry. Drive to Pigeon Forge. Visit Dollywood or The Island entertainment complex. Lunch at The Old Mill Restaurant. Afternoon: Scenic drive on Roaring Fork Motor Trail. Dinner at Cherokee Grill.</li>
+                        <li><strong>Day 4:</strong> Morning: Great Smoky Mountains National Park sunrise drive. Breakfast at Flapjack's, last downtown shopping, depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=GATLINBURG+DINING+IMAGE" alt="Gatlinburg Food" class="mission-image">
+                <ul>
+                    <li><strong>The Peddler Steakhouse:</strong> River-view dining, hand-cut steaks, romantic atmosphere</li>
+                    <li><strong>Cherokee Grill:</strong> Upscale Southern cuisine with mountain views</li>
+                    <li><strong>The Melting Pot:</strong> Interactive fondue dining, perfect for couples</li>
+                    <li><strong>The Old Mill Restaurant:</strong> Historic mill setting, Southern comfort food</li>
+                    <li><strong>Pancake Pantry:</strong> Gatlinburg institution, famous for pancakes and waffles</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Great Smoky Mountains National Park:</strong> 800+ miles of trails, stunning fall foliage, wildlife</li>
+                    <li><strong>Cades Cove:</strong> 11-mile scenic loop with historic buildings, wildlife viewing</li>
+                    <li><strong>Ober Gatlinburg:</strong> Aerial tramway, alpine slide, scenic chairlift</li>
+                    <li><strong>Dollywood:</strong> Theme park with rides, shows, and fall harvest festival</li>
+                    <li><strong>Roaring Fork Motor Trail:</strong> 6-mile one-way scenic drive through forest</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>The Spa at The Lodge at Buckberry Creek offers full spa services including couples massages, hot stone therapy, and facials. Many cabin rentals also feature private hot tubs with mountain views.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Helen Fall -->
+    <div id="mission-fall-helen" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #006 ★</div>
+                <h1>Helen, GA</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('fall')">← Back to Fall Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=HELEN+ALPINE+VILLAGE+IMAGE" alt="Helen" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Helen is a unique Bavarian-style alpine village nestled in the North Georgia mountains. This charming town offers German culture, tubing on the Chattahoochee River, and stunning fall foliage. The mission combines Old World charm with Southern hospitality, just 2.5 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Fall?</h3>
+                <p>Fall transforms Helen into a vibrant celebration with Oktoberfest (running late September through early November), peak foliage, and perfect weather for outdoor activities. The alpine architecture looks especially magical against autumn colors.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Late September or weekdays during Oktoberfest for smaller crowds. Early November offers post-festival discounts with lingering fall colors. Mid-week stays recommended.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('helen-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="helen-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive, check into alpine inn or cabin. Explore downtown Helen shops and galleries. Lunch at Bodensee Restaurant. Afternoon tubing on Chattahoochee River. Dinner at Paul's Margarita Deck (Mexican with mountain views).</li>
+                        <li><strong>Day 2:</strong> Breakfast at Hofer's Bakery (authentic German pastries). Drive to Anna Ruby Falls (0.9-mile paved trail to twin waterfalls). Picnic lunch at Unicoi State Park. Afternoon: Wine tasting at Habersham Winery. Dinner at Cafe International, evening Oktoberfest festivities.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Betty's Country Store. Drive scenic Russell-Brasstown Scenic Byway. Visit Hardman Farm Historic Site. Lunch at Troll Tavern. Afternoon: Dukes Creek Falls hike (2 miles). Dinner at The Troll Tavern German schnitzel.</li>
+                        <li><strong>Day 4:</strong> Morning walk along Chattahoochee River, Hofer's pastries to go, final shopping, depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=HELEN+BAVARIAN+FOOD+IMAGE" alt="Helen Food" class="mission-image">
+                <ul>
+                    <li><strong>Bodensee Restaurant:</strong> Authentic German cuisine, schnitzel, bratwurst, imported beers</li>
+                    <li><strong>The Troll Tavern:</strong> German specialties in cozy alpine setting</li>
+                    <li><strong>Hofer's Bakery:</strong> Fresh German pastries, pretzels, breads daily</li>
+                    <li><strong>Cafe International:</strong> European-inspired menu, outdoor patio dining</li>
+                    <li><strong>Paul's Margarita Deck:</strong> Casual Mexican, great views of Helen</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Oktoberfest:</strong> Live music, German food, beer, dancing (late Sept-early Nov)</li>
+                    <li><strong>Anna Ruby Falls:</strong> Stunning twin waterfalls, easy accessible hike</li>
+                    <li><strong>Chattahoochee River Tubing:</strong> Relaxing float through mountain scenery</li>
+                    <li><strong>Unicoi State Park:</strong> Hiking trails, lake beach, scenic overlooks</li>
+                    <li><strong>Alpine Village Shopping:</strong> German imports, local crafts, unique gifts</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>Innsbruck Resort & Golf Club offers spa services including massages and facials. Many cabin rentals feature hot tubs, and some hotels have on-site spa facilities.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentone Winter -->
+    <div id="mission-winter-mentone" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #007 ★</div>
+                <h1>Mentone, AL</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('winter')">← Back to Winter Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=MENTONE+LOOKOUT+MOUNTAIN+IMAGE" alt="Mentone" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Mentone is Alabama's hidden gem, a quiet mountain town perched on Lookout Mountain. This mission offers cozy cabin retreats, stunning bluff views, waterfalls, and charming local shops. It's the perfect winter escape for peace and romance, just 1.5 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Winter?</h3>
+                <p>Winter brings peaceful solitude, cozy fireplace evenings, and crisp mountain air. The area rarely sees heavy snow but offers potential for scenic winter landscapes. Cabin rentals drop to their lowest rates, making this the most budget-friendly season.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> January through early March for rock-bottom cabin prices. Mid-week stays offer additional discounts. Avoid holiday weekends for best rates and maximum solitude.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('mentone-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="mentone-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive at cabin, settle in. Afternoon: Drive Lookout Mountain Parkway scenic route. Stop at Mentone Market for local goods. Dinner cooked in cabin or at Wildflower Cafe. Evening: Fireplace, hot tub, stargazing.</li>
+                        <li><strong>Day 2:</strong> Breakfast at cabin. Morning hike to DeSoto Falls (1.5 miles). Pack picnic lunch. Afternoon: Explore Little River Canyon National Preserve (overlooks, short trails). Dinner at Gourdie's Goat Gourmet. Wine by the fire.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Log Cabin Deli. Visit Moon Lake for peaceful walk. Browse Mentone shops and art galleries. Lunch at Kamama Cafe. Afternoon: Hike to Lodge Falls or relax at cabin. Dinner at The Wildflower Cafe.</li>
+                        <li><strong>Day 4:</strong> Final cabin morning, coffee on the deck, pack up and depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=MENTONE+DINING+IMAGE" alt="Mentone Food" class="mission-image">
+                <ul>
+                    <li><strong>Wildflower Cafe:</strong> Farm-to-table, Southern comfort with creative twists</li>
+                    <li><strong>Gourdie's Goat Gourmet:</strong> Goat cheese specialties, pizzas, casual atmosphere</li>
+                    <li><strong>Kamama Cafe:</strong> Breakfast and lunch, homemade soups, sandwiches</li>
+                    <li><strong>Log Cabin Deli:</strong> Breakfast and deli sandwiches, local favorite</li>
+                    <li><strong>Mentone Market:</strong> Local produce, meats, and prepared foods for cabin cooking</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Little River Canyon:</strong> Deepest canyon east of Mississippi, scenic overlooks</li>
+                    <li><strong>DeSoto Falls:</strong> Beautiful waterfall with easy hiking access</li>
+                    <li><strong>Moon Lake:</strong> Peaceful lake for walking, reflection, and nature</li>
+                    <li><strong>Mentone Arts & Cultural Center:</strong> Local art, history, rotating exhibits</li>
+                    <li><strong>Cabin Time:</strong> Fireplaces, hot tubs, reading, quality time together</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>Most cabin rentals feature hot tubs and fireplaces for relaxation. For professional spa services, Cloud Nine Day Spa in Fort Payne (15 minutes away) offers massages, facials, and body treatments.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Franklin Winter -->
+    <div id="mission-winter-franklin" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #008 ★</div>
+                <h1>Franklin / Nashville, TN</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('winter')">← Back to Winter Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=FRANKLIN+DOWNTOWN+IMAGE" alt="Franklin" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Franklin and Nashville combine historic Southern charm with world-class music, food, and culture. This mission offers sophisticated dining, live music venues, historic sites, and boutique shopping. Experience Music City's finest, just 3 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Winter?</h3>
+                <p>Winter offers the best hotel rates (avoiding summer tourist rush), fewer crowds at major attractions, and cozy music venue experiences. The holiday season brings festive decorations and special events through December.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> January through early March for lowest rates. Mid-week stays offer significant savings. Avoid major concert weekends and CMA Fest dates.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('franklin-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="franklin-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive, check into Franklin hotel. Explore historic downtown Franklin square. Lunch at Gray's on Main. Afternoon: Carnton Plantation tour (Civil War history). Dinner at Harpeth & Main. Evening: Live music on Main Street.</li>
+                        <li><strong>Day 2:</strong> Breakfast at Frothy Monkey. Drive to Nashville. Visit Country Music Hall of Fame. Lunch at Hattie B's Hot Chicken. Afternoon: Parthenon in Centennial Park, Honky Tonk Row walk. Dinner at The Catbird Seat (upscale tasting menu). Evening show at Ryman Auditorium or Bluebird Cafe.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Pancake Pantry Nashville. Morning at Belle Meade Plantation (wine tasting included). Lunch at Puckett's. Afternoon: 12 South neighborhood (boutiques, shops). Dinner at City House. Evening at The Station Inn for bluegrass.</li>
+                        <li><strong>Day 4:</strong> Final Franklin downtown walk, coffee at Frothy Monkey, last-minute shopping, depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=NASHVILLE+FOOD+SCENE+IMAGE" alt="Franklin Food" class="mission-image">
+                <ul>
+                    <li><strong>Harpeth & Main:</strong> Upscale Southern, excellent cocktails, intimate setting</li>
+                    <li><strong>The Catbird Seat:</strong> Chef's tasting menu, reservations essential, unforgettable</li>
+                    <li><strong>Hattie B's:</strong> Nashville hot chicken institution, prepare for heat</li>
+                    <li><strong>City House:</strong> Italian-Southern fusion, wood-fired pizzas, belly ham</li>
+                    <li><strong>Gray's on Main:</strong> Franklin fine dining, seasonal menu, romantic</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Country Music Hall of Fame:</strong> Comprehensive music history, rotating exhibits</li>
+                    <li><strong>Ryman Auditorium:</strong> Historic venue, guided tours, evening concerts</li>
+                    <li><strong>Historic Franklin:</strong> Civil War sites, antebellum homes, charming square</li>
+                    <li><strong>Live Music Venues:</strong> Bluebird Cafe, Station Inn, honky tonks on Broadway</li>
+                    <li><strong>12 South & Gulch:</strong> Trendy neighborhoods for shopping and dining</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>Woodhouse Day Spa in Franklin offers full spa packages including couples massages, facials, and body treatments. Nashville also has numerous spa options including The Spa at The Hermitage Hotel.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MISSION DETAIL SCREENS -->
+    <!-- Chattanooga Spring -->
+    <div id="mission-spring-chattanooga" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #001 ★</div>
+                <h1>Chattanooga, TN</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('spring')">← Back to Spring Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=CHATTANOOGA+WATERFRONT+IMAGE" alt="Chattanooga" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Chattanooga delivers a perfect spring escape with mild temperatures, blooming landscapes, and the iconic Tennessee River winding through downtown. This mission combines outdoor adventure with world-class attractions, all within a 2-hour drive from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Spring?</h3>
+                <p>Spring (March-May) brings perfect hiking weather, fewer crowds than summer, and the city comes alive with outdoor festivals. The Riverwalk and Lookout Mountain are spectacular with spring blooms.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Mid-March to early May, Tuesday-Thursday stays for best rates. Avoid holiday weekends and major event dates.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('chatt-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="chatt-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive mid-day, check into downtown hotel. Walk the Riverwalk, grab dinner at Tupelo Honey or Terminal Brewhouse. Evening stroll across Walnut Street Bridge.</li>
+                        <li><strong>Day 2:</strong> Tennessee Aquarium (one of the best freshwater aquariums in the world). Lunch at Public House. Afternoon: Incline Railway up Lookout Mountain, explore Ruby Falls or Rock City. Dinner at St. John's Restaurant.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Bluegrass Grill. Morning hike at Cloudland Canyon State Park (40 min drive). Picnic lunch. Return for downtown shopping/art district. Dinner at Easy Bistro & Bar.</li>
+                        <li><strong>Day 4:</strong> Breakfast at Milk & Honey, last Riverwalk stroll, depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=CHATTANOOGA+FOOD+SCENE+IMAGE" alt="Chattanooga Food" class="mission-image">
+                <ul>
+                    <li><strong>Tupelo Honey:</strong> Southern comfort food with upscale twist (shrimp & grits, fried chicken)</li>
+                    <li><strong>St. John's Restaurant:</strong> Fine dining in a historic meeting house</li>
+                    <li><strong>Terminal Brewhouse:</strong> BBQ and craft beer in renovated train station</li>
+                    <li><strong>Easy Bistro & Bar:</strong> Farm-to-table with excellent cocktails</li>
+                    <li><strong>Public House:</strong> Elevated pub fare, rooftop seating</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Tennessee Aquarium:</strong> World-class freshwater exhibits, river otters, penguins</li>
+                    <li><strong>Lookout Mountain:</strong> Incline Railway, Ruby Falls (underground waterfall), Rock City</li>
+                    <li><strong>Riverwalk:</strong> 13 miles of scenic walking/biking paths along the Tennessee River</li>
+                    <li><strong>Hunter Museum of Art:</strong> Stunning bluff-side location, excellent collection</li>
+                    <li><strong>Cloudland Canyon:</strong> Hiking, waterfalls, stunning canyon views</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>The Edwin Hotel features a spa with massage services. Alternatively, Woodhouse Day Spa downtown offers full spa packages including couples massages.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blue Ridge Spring -->
+    <div id="mission-spring-blueridge" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #002 ★</div>
+                <h1>Blue Ridge, GA</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('spring')">← Back to Spring Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=BLUE+RIDGE+MOUNTAINS+IMAGE" alt="Blue Ridge" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Blue Ridge is a charming mountain town offering a cozy, romantic escape. Known for its scenic railway, hiking trails, and quaint downtown, this mission is perfect for couples seeking relaxation and natural beauty just 2.5 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Spring?</h3>
+                <p>Spring brings wildflowers, rushing waterfalls at peak flow, and pleasant hiking temperatures. The town is less crowded than fall, and cabin rentals offer mid-week discounts.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Late March through May, Tuesday-Thursday for cabin deals. Avoid spring break weeks.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('blueridge-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="blueridge-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive at cabin, settle in. Afternoon: Explore downtown Blue Ridge shops and galleries. Dinner at Harvest on Main. Evening: Hot tub and stargazing.</li>
+                        <li><strong>Day 2:</strong> Blue Ridge Scenic Railway (4-hour roundtrip through mountains). Lunch at depot or pack a picnic. Afternoon: Wine tasting at Bear Claw Vineyards. Dinner at Treo's Pasta Kitchen.</li>
+                        <li><strong>Day 3:</strong> Hike to Long Creek Falls (2 miles, stunning waterfall). Pack lunch. Afternoon: Relax at cabin or visit Mercier Orchards. Dinner at Jim's Smokin' Que.</li>
+                        <li><strong>Day 4:</strong> Morning at Toccoa River for scenic views, coffee at Blue Ridge Coffee & Tea Co., depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=BLUE+RIDGE+DINING+IMAGE" alt="Blue Ridge Food" class="mission-image">
+                <ul>
+                    <li><strong>Harvest on Main:</strong> Farm-to-table Southern cuisine, rotating seasonal menu</li>
+                    <li><strong>Treo's Pasta Kitchen:</strong> Homemade pasta, intimate Italian spot</li>
+                    <li><strong>Jim's Smokin' Que:</strong> Award-winning BBQ, huge portions</li>
+                    <li><strong>Black Sheep Restaurant:</strong> Upscale tavern fare with mountain views</li>
+                    <li><strong>Mercier Orchards:</strong> Apple pies, cider, country store (30 min north)</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Blue Ridge Scenic Railway:</strong> Historic train through Chattahoochee National Forest</li>
+                    <li><strong>Hiking:</strong> Long Creek Falls, Springer Mountain, Benton MacKaye Trail</li>
+                    <li><strong>Toccoa River:</strong> Tubing, fishing, riverside picnic spots</li>
+                    <li><strong>Downtown Blue Ridge:</strong> Antique shops, art galleries, local crafts</li>
+                    <li><strong>Bear Claw Vineyards:</strong> Wine tasting with mountain views</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>Many cabin rentals include hot tubs. For professional spa services, The Spa at River's Edge offers massage and facials by appointment in nearby Ellijay (20 minutes).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gulf Shores Summer -->
+    <div id="mission-summer-gulfshores" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #003 ★</div>
+                <h1>Gulf Shores, AL</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('summer')">← Back to Summer Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=GULF+SHORES+BEACH+IMAGE" alt="Gulf Shores" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Gulf Shores offers white sand beaches, fresh Gulf seafood, and endless water activities. This classic beach getaway is just 4 hours from Birmingham and delivers the ultimate summer coastal experience at a fraction of Florida prices.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Summer?</h3>
+                <p>Summer is peak beach season with warm Gulf waters perfect for swimming. While it's the busiest time, strategic timing and condo rentals keep costs manageable.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Early June or late August (shoulder weeks). Mid-week Sunday-Thursday stays offer significant savings. Avoid July 4th and spring break overlap.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('gulfshores-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="gulfshores-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive, check into beachfront condo. Afternoon beach time. Sunset at Gulf State Park Pier. Dinner at The Hangout (live music, beach vibes).</li>
+                        <li><strong>Day 2:</strong> Morning beach walk and swim. Lunch at LuLu's (waterfront, owned by Jimmy Buffett's sister). Afternoon: Dolphin cruise or kayak rental. Dinner at Fisher's Upstairs (fine dining with sunset views).</li>
+                        <li><strong>Day 3:</strong> Breakfast at Another Broken Egg. Visit Gulf State Park Nature Center, hike the trails. Beach time. Lunch at Tacky Jack's. Evening: Mini golf at The Park. Dinner at Cobalt Restaurant.</li>
+                        <li><strong>Day 4:</strong> Final beach morning, breakfast at condo, depart after lunch.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=GULF+COAST+SEAFOOD+IMAGE" alt="Gulf Shores Food" class="mission-image">
+                <ul>
+                    <li><strong>Fisher's Upstairs:</strong> Upscale seafood, incredible sunset views, reservations essential</li>
+                    <li><strong>The Hangout:</strong> Casual beach bar with live music, shrimp baskets, frozen drinks</li>
+                    <li><strong>LuLu's:</strong> Fun waterfront atmosphere, gumbo, fried seafood platters</li>
+                    <li><strong>Cobalt Restaurant:</strong> Fresh Gulf fish, elegant but relaxed</li>
+                    <li><strong>Tacky Jack's:</strong> Local favorite for oysters and fried green tomatoes</li>
+                </ul>
+
+                <h3>Mission Activities</h3>
+                <ul>
+                    <li><strong>Beach Time:</strong> Swimming, sunbathing, beach walking along miles of white sand</li>
+                    <li><strong>Gulf State Park:</strong> 6,500 acres with trails, fishing pier, nature center</li>
+                    <li><strong>Dolphin Cruises:</strong> Multiple operators offer sunset and dolphin watching tours</li>
+                    <li><strong>Water Sports:</strong> Paddleboarding, kayaking, jet ski rentals</li>
+                    <li><strong>The Wharf:</strong> Shopping, dining, Ferris wheel, evening entertainment</li>
+                </ul>
+
+                <h3>Spa Options</h3>
+                <p>Spa at The Beach Club offers full spa services including couples massages, facials, and body treatments. Book ahead during summer months.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fairhope Summer -->
+    <div id="mission-summer-fairhope" class="screen">
+        <div class="container">
+            <div class="header">
+                <div class="classified-stamp">★ MISSION FILE #004 ★</div>
+                <h1>Fairhope, AL</h1>
+            </div>
+
+            <button class="back-btn" onclick="showSeasonScreen('summer')">← Back to Summer Missions</button>
+
+            <div class="mission-file">
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/c41e3a?text=FAIRHOPE+DOWNTOWN+IMAGE" alt="Fairhope" class="mission-image">
+
+                <h2>Mission Overview</h2>
+                <p>Fairhope is a charming bayside town offering art galleries, boutique shopping, and spectacular sunsets over Mobile Bay. This mission combines coastal beauty with small-town Southern hospitality, just 3.5 hours from Birmingham.</p>
+                
+                <div class="budget-tag">AGENT ALLOCATION: $800</div>
+
+                <h3>Why Summer?</h3>
+                <p>Summer brings warm bay waters, outdoor concerts, and the famous Fairhope sunsets. The town's tree-lined streets provide shade, and bay breezes keep temperatures pleasant.</p>
+
+                <h3>Best Time to Deploy</h3>
+                <p><strong>Target Window:</strong> Early June or late August, mid-week stays. Avoid Fourth of July and Arts & Crafts Festival weekends for better rates.</p>
+
+                <button class="decrypt-btn" onclick="toggleContent('fairhope-itinerary')">▶ DECRYPT ITINERARY</button>
+
+                <div id="fairhope-itinerary" class="hidden-content">
+                    <h3>Sample 3-Night Mission Plan</h3>
+                    <ul>
+                        <li><strong>Day 1:</strong> Arrive, check into B&B or hotel. Stroll downtown Fairhope Avenue, explore galleries and shops. Sunset at Fairhope Pier. Dinner at Panini Pete's.</li>
+                        <li><strong>Day 2:</strong> Breakfast at Old 27 Grill. Morning at Weeks Bay Reserve for kayaking/nature trails. Lunch at Thyme by the Bay. Afternoon: Browse art galleries and boutiques. Dinner at Sunset Pointe at Fly Creek.</li>
+                        <li><strong>Day 3:</strong> Breakfast at Cafe Beignet. Day trip to Bellingrath Gardens (30 min). Picnic lunch on grounds. Return for downtown coffee shop time. Dinner at Dragonfly Foodbar. Evening concert at Fairhope Pier (check schedule).</li>
+                        <li><strong>Day 4:</strong> Final pier walk, breakfast at Greer's, last-minute shopping, depart.</li>
+                    </ul>
+                </div>
+
+                <h3>Food Intelligence</h3>
+                <!-- IMAGE: Replace URL below -->
+                <img src="https://placehold.co/900x300/1a1a1a/7cfc00?text=FAIRHOPE+CUISINE+IMAGE" alt="Fairhope Food" class="mission-image">
+                <ul>
+                    <li><strong>Sunset Pointe:</strong> Waterfront dining with stunning bay views, fresh seafood</li>
+                    <li><strong>Panini Pete's:</strong> Creative paninis, salads, excellent wine list</li>
+                    <li><strong>Dragonfly Foodbar:</strong> Farm-to-table Southern fusion, intimate atmosphere</li>
