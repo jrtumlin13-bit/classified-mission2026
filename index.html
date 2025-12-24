@@ -624,6 +624,71 @@
 <body>
 
     <script>
+                        // Money collection system
+const collectedMoney = {};
+
+function collectMoney(amount, moneyId) {
+    // Check if already collected
+    if (collectedMoney[moneyId]) {
+        return;
+    }
+
+    // Mark as collected
+    collectedMoney[moneyId] = amount;
+
+    // Update display
+    updateMoneyDisplay();
+
+    // Mark the clicked element as collected
+    const clickedElement = document.querySelector(`[data-money-id="${moneyId}"]`);
+    if (clickedElement) {
+        clickedElement.classList.add('collected');
+        const originalText = clickedElement.innerHTML;
+        clickedElement.innerHTML = '✓ COLLECTED<br>' + originalText.split('💵')[1];
+    }
+}
+
+function updateMoneyDisplay() {
+    // Auto-update budget if already revealed
+    const totalBudgetSpan = document.getElementById('totalBudget');
+    const budgetReveal = document.getElementById('budgetReveal');
+    
+    if (totalBudgetSpan && budgetReveal && budgetReveal.style.display === 'block') {
+        let total = 800;
+        for (let id in collectedMoney) {
+            total += collectedMoney[id];
+        }
+        totalBudgetSpan.textContent = total;
+    }
+}
+
+function revealBudget() {
+    const revealText = document.getElementById('budgetReveal');
+    const totalBudgetSpan = document.getElementById('totalBudget');
+    
+    if (revealText && totalBudgetSpan) {
+        revealText.style.display = 'block';
+        
+        // Calculate total: base $0 + all collected bonus funds
+        let total = 1000;
+        for (let id in collectedMoney) {
+            total += collectedMoney[id];
+        }
+        
+        totalBudgetSpan.textContent = total;
+    }
+}
+
+function loadMoneyProgress() {
+    // Mark collected money on current page
+    document.querySelectorAll('.hidden-money').forEach(el => {
+        const moneyId = el.getAttribute('data-money-id');
+        if (collectedMoney[moneyId]) {
+            el.classList.add('collected');
+            el.innerHTML = '✓ COLLECTED<br>' + el.innerHTML.split('💵')[1];
+        }
+    });
+}
         // Navigation system
         let currentSeason = '';
 
@@ -759,72 +824,8 @@
     <h3>Agent Allocation</h3>
     <p id="budgetReveal" style="display: none;">Approved Budget: $<span id="totalBudget">Unknown</span> per mission</p>
     <p id="budgetHidden" style="color: #888; font-size: 0.85em;">Unknown</p>
-</div>
-                // Money collection system
-const collectedMoney = {};
+</div> 
 
-function collectMoney(amount, moneyId) {
-    // Check if already collected
-    if (collectedMoney[moneyId]) {
-        return;
-    }
-
-    // Mark as collected
-    collectedMoney[moneyId] = amount;
-
-    // Update display
-    updateMoneyDisplay();
-
-    // Mark the clicked element as collected
-    const clickedElement = document.querySelector(`[data-money-id="${moneyId}"]`);
-    if (clickedElement) {
-        clickedElement.classList.add('collected');
-        const originalText = clickedElement.innerHTML;
-        clickedElement.innerHTML = '✓ COLLECTED<br>' + originalText.split('💵')[1];
-    }
-}
-
-function updateMoneyDisplay() {
-    // Auto-update budget if already revealed
-    const totalBudgetSpan = document.getElementById('totalBudget');
-    const budgetReveal = document.getElementById('budgetReveal');
-    
-    if (totalBudgetSpan && budgetReveal && budgetReveal.style.display === 'block') {
-        let total = 800;
-        for (let id in collectedMoney) {
-            total += collectedMoney[id];
-        }
-        totalBudgetSpan.textContent = total;
-    }
-}
-
-function revealBudget() {
-    const revealText = document.getElementById('budgetReveal');
-    const totalBudgetSpan = document.getElementById('totalBudget');
-    
-    if (revealText && totalBudgetSpan) {
-        revealText.style.display = 'block';
-        
-        // Calculate total: base $0 + all collected bonus funds
-        let total = 1000;
-        for (let id in collectedMoney) {
-            total += collectedMoney[id];
-        }
-        
-        totalBudgetSpan.textContent = total;
-    }
-}
-
-function loadMoneyProgress() {
-    // Mark collected money on current page
-    document.querySelectorAll('.hidden-money').forEach(el => {
-        const moneyId = el.getAttribute('data-money-id');
-        if (collectedMoney[moneyId]) {
-            el.classList.add('collected');
-            el.innerHTML = '✓ COLLECTED<br>' + el.innerHTML.split('💵')[1];
-        }
-    });
-}
                 <button class="decrypt-btn" onclick="showSeasonSelect()" style="margin-top: 40px;">▶ AUTHORIZATION GRANTED - BEGIN BRIEFING</button>
             </div>
         </div>
