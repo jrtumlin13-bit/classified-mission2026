@@ -670,7 +670,7 @@ function revealBudget() {
         revealText.style.display = 'block';
         
         // Calculate total: base $0 + all collected bonus funds
-        let total = 1000;
+        let total = 0;
         for (let id in collectedMoney) {
             total += collectedMoney[id];
         }
@@ -822,8 +822,8 @@ function loadMoneyProgress() {
                 
             <div class="agent-allocation" style="cursor: pointer;" onclick="revealBudget()">
     <h3>Agent Allocation</h3>
-    <p id="budgetReveal" style="display: none;">Approved Budget: $<span id="totalBudget">Unknown</span> per mission</p>
-    <p id="budgetHidden" style="color: #888; font-size: 0.85em;">Unknown</p>
+    <p id="budgetReveal" style="display: none;">Approved Budget: $<span id="totalBudget"></span> per mission</p>
+    <p id="budgetHidden" style="color: #888; font-size: 0.85em;"></p>
 </div> 
 
                 <button class="decrypt-btn" onclick="showSeasonSelect()" style="margin-top: 40px;">▶ AUTHORIZATION GRANTED - BEGIN BRIEFING</button>
